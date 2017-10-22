@@ -1,0 +1,26 @@
+{
+  "name": "vim-react",
+  "version": "0.0.1",
+  "description": "Web vim components",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "ava",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "author": "sauloxd",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-scripts": "1.0.14"
+  },
+  "devDependencies": {
+    "ava": "^0.22.0",
+    "babel-eslint": "^8.0.1",
+    "eslint": "^4.9.0",
+    "eslint-plugin-react": "^7.4.0"
+  }
+}
