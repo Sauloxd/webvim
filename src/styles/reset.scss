@@ -1,5 +1,5 @@
 html,
-body,
+ body,
 p,
 ol,
 ul,
@@ -22,7 +22,8 @@ h4,
 h5,
 h6 {
   margin: 0;
-  padding: 0; }
+  padding: 0;
+}
 
 h1,
 h2,
@@ -31,22 +32,27 @@ h4,
 h5,
 h6 {
   font-size: 100%;
-  font-weight: normal; }
+  font-weight: normal;
+}
 
 ul {
-  list-style: none; }
+  list-style: none;
+}
 
 button,
 input,
 select,
 textarea {
-  margin: 0; }
+  margin: 0;
+}
 
 html {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 *, *:before, *:after {
-  box-sizing: inherit; }
+  box-sizing: inherit;
+}
 
 img,
 embed,
@@ -55,24 +61,30 @@ object,
 audio,
 video {
   height: auto;
-  max-width: 100%; }
+  max-width: 100%;
+}
 
 iframe {
-  border: 0; }
+  border: 0;
+}
 
 table {
   border-collapse: collapse;
-  border-spacing: 0; }
+  border-spacing: 0;
+}
 
 td,
 th {
   padding: 0;
-  text-align: left; }
+  text-align: left;
+}
 
 a {
-  color: inherit;
-  text-decoration: none;
-  border: none; }
+ color: inherit;
+ text-decoration: none;
+ border: none;
+}
+
 
 /* ----------------------------------------------------------------------------------------------------
 Super Form Reset
@@ -86,36 +98,45 @@ A couple of things to watch out for:
 - IE: You don't need to fake inline-block with labels and form controls in IE. They function as inline-block.
 - By turning off ::-webkit-search-decoration, it removes the extra whitespace on the left on search inputs
 ----------------------------------------------------------------------------------------------------*/
+
 input,
 label,
 select,
 button,
-textarea {
+textarea
+{
   -webkit-appearance: none;
-  margin: 0;
-  border: 0;
-  padding: 0;
-  display: inline-block;
-  vertical-align: middle;
-  white-space: normal;
-  background: none;
-  line-height: 1;
+  margin:0;
+  border:0;
+  padding:0;
+  display:inline-block;
+  vertical-align:middle;
+  white-space:normal;
+  background:none;
+  line-height:1;
+
   /* Browsers have different default form fonts */
-  font-size: 13px;
-  font-family: Arial; }
+  font-size:13px;
+  font-family:Arial;
+}
 
 /* Remove the stupid outer glow in Webkit */
-input:focus {
-  outline: 0; }
+input:focus
+{
+  outline:0;
+}
 
 /* Box Sizing Reset
 -----------------------------------------------*/
+
 /* All of our custom controls should be what we expect them to be */
 input,
-textarea {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box; }
+textarea
+{
+  -webkit-box-sizing:content-box;
+  -moz-box-sizing:content-box;
+  box-sizing:content-box;
+}
 
 /* These elements are usually rendered a certain way by the browser */
 button,
@@ -124,90 +145,105 @@ input[type=button],
 input[type=submit],
 input[type=checkbox],
 input[type=radio],
-select {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
+select
+{
+  -webkit-box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  box-sizing:border-box;
+}
 
 /* Text Inputs
 -----------------------------------------------*/
+
+input[type=date],
+input[type=datetime],
+input[type=datetime-local],
+input[type=email],
+input[type=month],
+input[type=number],
+input[type=password],
+input[type=range],
+input[type=search],
+input[type=tel],
+input[type=text],
+input[type=time],
+input[type=url],
+input[type=week]
+{
+}
+
 /* Button Controls
 -----------------------------------------------*/
+
 input[type=checkbox],
-input[type=radio] {
-  width: 13px;
-  height: 13px; }
+input[type=radio]
+{
+  width:13px;
+  height:13px;
+}
 
 /* File Uploads
 -----------------------------------------------*/
+
+input[type=file]
+{
+
+}
+
 /* Search Input
 -----------------------------------------------*/
+
 /* Make webkit render the search input like a normal text field */
-input[type=search] {
-  -webkit-appearance: textfield;
-  -webkit-box-sizing: content-box; }
+input[type=search]
+{
+  -webkit-appearance:textfield;
+  -webkit-box-sizing:content-box;
+}
 
 /* Turn off the recent search for webkit. It adds about 15px padding on the left */
-::-webkit-search-decoration {
-  display: none; }
+::-webkit-search-decoration
+{
+  display:none;
+}
 
 /* Buttons
 -----------------------------------------------*/
+
 button,
 input[type="reset"],
 input[type="button"],
-input[type="submit"] {
+input[type="submit"]
+{
   /* Fix IE7 display bug */
-  overflow: visible;
-  width: auto; }
+  overflow:visible;
+  width:auto;
+}
 
 /* IE8 and FF freak out if this rule is within another selector */
-::-webkit-file-upload-button {
-  padding: 0;
-  border: 0;
-  background: none; }
+::-webkit-file-upload-button
+{
+  padding:0;
+  border:0;
+  background:none;
+}
 
 /* Textarea
 -----------------------------------------------*/
-textarea {
+
+textarea
+{
   /* Move the label to the top */
-  vertical-align: top;
+  vertical-align:top;
+
   /* Turn off scroll bars in IE unless needed */
-  overflow: auto; }
+  overflow:auto;
+}
 
 /* Selects
 -----------------------------------------------*/
-select[multiple] {
+
+select[multiple]
+{
   /* Move the label to the top */
-  vertical-align: top; }
-
-.--no-select {
-  -webkit-touch-callout: none;
-  /* iOS Safari */
-  -webkit-user-select: none;
-  /* Safari */
-  -khtml-user-select: none;
-  /* Konqueror HTML */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer/Edge */
-  user-select: none;
-  /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */ }
-
-*:focus {
-  outline: none; }
-
-* {
-  -webkit-user-select: none;
-  /* Chrome all / Safari all */
-  -moz-user-select: none;
-  /* Firefox all */
-  -ms-user-select: none;
-  /* IE 10+ */
-  user-select: none;
-  /* Likely future */ }
-
-body {
-  color: #303030; }
+  vertical-align:top;
+}
