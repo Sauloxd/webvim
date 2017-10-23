@@ -181,33 +181,5 @@ select[multiple] {
   /* Move the label to the top */
   vertical-align: top; }
 
-.--no-select {
-  -webkit-touch-callout: none;
-  /* iOS Safari */
-  -webkit-user-select: none;
-  /* Safari */
-  -khtml-user-select: none;
-  /* Konqueror HTML */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer/Edge */
-  user-select: none;
-  /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */ }
-
-*:focus {
-  outline: none; }
-
-* {
-  -webkit-user-select: none;
-  /* Chrome all / Safari all */
-  -moz-user-select: none;
-  /* Firefox all */
-  -ms-user-select: none;
-  /* IE 10+ */
-  user-select: none;
-  /* Likely future */ }
-
 body {
   color: #303030; }

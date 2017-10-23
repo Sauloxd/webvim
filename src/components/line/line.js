@@ -15,7 +15,7 @@ class Line extends Component {
     return (
       <div>
         {this.state.text.split('').map((char, key) => (
-          <Char key={key} value={char} />
+          <Char key={key} value={char} isActive={this.props.onChar === key} />
         ))}
       </div>
     )
@@ -23,7 +23,9 @@ class Line extends Component {
 }
 
 Line.propTypes = {
-  text: PropTypes.string
+  text: PropTypes.string,
+  isActive: PropTypes.bool,
+  onChar: PropTypes.number
 }
 
 export default Line
