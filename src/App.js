@@ -8,53 +8,91 @@ const MODES = {
   NORMAL_MODE: 'normal_mode'
 }
 
-const KEY_CODES = {
-  'h': 72,
-  'j': 74,
-  'k': 75,
-  'l': 76,
-  'o': 79
-}
+const formatText = text => text.split('\n').map((line, index) => ({ index, value: line }))
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      text: ['DummyText'],
-      charPosition: { x: 1, y: 0 },
+      text: formatText('What are you doing here\nGo Away!'),
+      cursor: { x: 1, y: 0 },
       mode: MODES.NORMAL_MODE
     }
     document.body.onkeydown = this.handleMovement.bind(this)
   }
 
-  handleMovement(ev) {
+  checkIfCharIs(type) {
+    const currentLine = this.getCurrentLine()
+    if (!currentLine) throw new Error('Cursor in invalid Y position!')
+    if (!['first', 'last'].includes(type)) throw new Error('Invalid cursor position type')
+
+    return {
+      first: !currentLine.value[this.state.cursor.x - 1],
+      last: !currentLine.value[this.state.cursor.x + 1],
+    }[type]
+  }
+
+  checkIfHasLineOn(type) {
+    if (!['previous', 'next'].includes(type)) throw new Error('Invalid cursor position type')
+
+    return {
+      previous: this.state.text[this.state.cursor.y - 1],
+      next: this.state.text[this.state.cursor.y + 1]
+    }[type]
+  }
+
+
+  getCurrentLine() {
+    return this.state.text.find(({ index }) => this.state.cursor.y === index)
+  }
+
+  handleMovement({ key }) {
+    const cursor = this.state.cursor
+
+    const addLineBellow = ({ text, currentCursor: { y } }) => {
+      if (text.length - 1 === y) return text.concat({ value: '¬', index: y + 1 })
+
+      return text.reduce((updatedText, line) => {
+        if (line.index < y) return updatedText.concat(line)
+        if (line.index > y) return updatedText.concat({ ...line, index: line.index + 1 })
+        if (line.index === y) return updatedText.concat([line, { value: '¬', index: y + 1 }])
+        return updatedText
+      }, [])
+    }
+
+    const addLineAbove = ({ text, currentCursor: { y } }) =>
+      text.reduce((updatedText, line) => {
+        if (line.index < y) return updatedText.concat(line)
+        if (line.index > y) return updatedText.concat({ ...line, index: line.index + 1 })
+        if (line.index === y) return updatedText.concat([{ value: '¬', index: y }, { ...line, index: y + 1 }])
+
+        return updatedText
+      }, [])
+
     const mapActions = {
       [MODES.NORMAL_MODE]: {
-        [KEY_CODES['l']]: () =>
-          !this.state.text[this.state.charPosition.y][this.state.charPosition.x + 1]
-            ? this.setState({ charPosition: { ...this.state.charPosition, x: this.state.text[this.state.charPosition.y].length - 1 }})
-            : this.setState({ charPosition: { ...this.state.charPosition, x: this.state.charPosition.x + 1 }}),
-        [KEY_CODES['h']]: () =>
-          !this.state.text[this.state.charPosition.y][this.state.charPosition.x - 1]
-            ? this.setState({ charPosition: { ...this.state.charPosition, x: 0 }})
-            : this.setState({ charPosition: { ...this.state.charPosition, x: this.state.charPosition.x - 1 }}),
-        [KEY_CODES['k']]: () =>
-          this.state.text[this.state.charPosition.y - 1] && this.setState({ charPosition: { ...this.state.charPosition, y: this.state.charPosition.y - 1 }}),
-        [KEY_CODES['j']]: () =>
-          this.state.text[this.state.charPosition.y + 1] && this.setState({ charPosition: { ...this.state.charPosition, y: this.state.charPosition.y + 1 }}),
+        l: () => this.setState({
+          cursor: { ...cursor, x: this.checkIfCharIs('last') ? this.getCurrentLine().value.length - 1 : cursor.x + 1 }
+        }),
+        h: () => this.setState({
+          cursor: { ...cursor, x: this.checkIfCharIs('first') ? 0 : cursor.x - 1 }
+        }),
+        k: () => this.checkIfHasLineOn('previous') && this.setState({ cursor: { ...cursor, y: cursor.y - 1 }}),
+        j: () => this.checkIfHasLineOn('next') && this.setState({ cursor: { ...cursor, y: cursor.y + 1 }}),
         /* These guys go to insert mode aftwerwards */
-        [KEY_CODES['o']]: () => this.setState({ text: this.state.text.concat('¬'), charPosition: { ...this.state.charPosition, y: this.state.charPosition.y + 1 } }),
-        [KEY_CODES['O']]: () => this.setState({ text: ['¬', ...this.state.text], charPosition: { ...this.state.charPosition, y: this.state.charPosition.y - 1 } })
+        o: () => this.setState({ text: addLineBellow({ text: this.state.text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y + 1 } }),
+        O: () => this.setState({ text: addLineAbove({ text: this.state.text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y } })
       }
     }
-    return mapActions[this.state.mode][ev.keyCode] && mapActions[this.state.mode][ev.keyCode]()
+
+    return mapActions[this.state.mode][key] && mapActions[this.state.mode][key]()
   }
 
   render() {
     return (
       <div className="App">
-        {this.state.text.map((line, key) => (
-          <Line key={key} text={line} isActive={key === this.state.charPosition.y} onChar={this.state.charPosition.x}/>
+        {this.state.text.map(({ index, value }) => (
+          <Line key={index} text={value} isActive={index === this.state.cursor.y} onChar={this.state.cursor.x}/>
         ))}
 
       </div>

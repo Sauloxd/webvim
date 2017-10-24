@@ -1,7 +1,10 @@
+$char-size: 14px;
+$whitespace-size: $char-size/2;
+
 .char__cntr {
   display: inline-block;
   color: white;
-  font-size: 14px;
+  font-size: $char-size;
   position: relative;
 
   &.--active:before {
@@ -11,4 +14,9 @@
     background-color: blue;
     opacity: 0.5;
   }
+}
+
+.char__whitespace {
+  width: $whitespace-size;
+  color: transparent;
 }
