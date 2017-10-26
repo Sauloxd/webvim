@@ -1,0 +1,4 @@
+{
+  "name": "RootReducer",
+  "main": "./root.reducer.js"
+}
