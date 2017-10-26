@@ -1,6 +1,7 @@
+/*eslint no-mixed-operators: off*/
 import React, { Component } from 'react'
-import Line from './components/line'
-
+import { createStore } from 'redux'
+import Pane from './components/pane'
 import './App.css'
 
 const MODES = {
@@ -8,96 +9,95 @@ const MODES = {
   NORMAL_MODE: 'normal_mode'
 }
 
+const ACTIONS = {
+  MOVEMENT: 'MOVEMENT',
+  EDITOR: 'EDITOR'
+}
+
 const formatText = text => text.split('\n').map((line, index) => ({ index, value: line }))
+const getCurrentLine = state => state.text.find(({ index }) => state.cursor.y === index)
+const checkIfHasLineOn = (type, state) => {
+  if (!['previous', 'next'].includes(type)) throw new Error('Invalid cursor position type')
+
+  return {
+    previous: state.text[state.cursor.y - 1],
+    next: state.text[state.cursor.y + 1]
+  }[type]
+}
+
+const addLineBellow = ({ text, currentCursor: { y } }) => {
+  if (text.length - 1 === y) return text.concat({ value: '¬', index: y + 1 })
+
+  return text.reduce((updatedText, line) => {
+    if (line.index < y) return updatedText.concat(line)
+    if (line.index > y) return updatedText.concat({ ...line, index: line.index + 1 })
+    if (line.index === y) return updatedText.concat([line, { value: '¬', index: y + 1 }])
+    return updatedText
+  }, [])
+}
+
+const addLineAbove = ({ text, currentCursor: { y } }) =>
+  text.reduce((updatedText, line) => {
+    if (line.index < y) return updatedText.concat(line)
+    if (line.index > y) return updatedText.concat({ ...line, index: line.index + 1 })
+    if (line.index === y) return updatedText.concat([{ value: '¬', index: y }, { ...line, index: y + 1 }])
+
+    return updatedText
+  }, [])
+
+const checkIfCharIs = (type, state) => {
+  const currentLine = getCurrentLine(state)
+  if (!currentLine) return false
+  if (!['first', 'last'].includes(type)) throw new Error('Invalid cursor position type')
+
+  return {
+    first: !currentLine.value[state.cursor.x - 1],
+    last: !currentLine.value[state.cursor.x + 1],
+  }[type]
+}
+
+const movement = (state = {
+  text: formatText('What are you doing here\nGo Away!'),
+  cursor: { x: 1, y: 0 },
+  mode: MODES.NORMAL_MODE
+} , action) => {
+  const { cursor, text } = state
+
+  const handlerMapper = {
+    [ACTIONS.MOVEMENT]: {
+      l: {...state, cursor: { ...cursor, x: checkIfCharIs('last', state) ? getCurrentLine(state).value.length - 1 : cursor.x + 1 }},
+      h: {...state, cursor: { ...cursor, x: checkIfCharIs('first', state) ? 0 : cursor.x - 1 }},
+      k: checkIfHasLineOn('previous', state) && {...state, cursor: { ...cursor, y: cursor.y - 1 }},
+      j: checkIfHasLineOn('next', state) && {...state, cursor: { ...cursor, y: cursor.y + 1 }},
+    },
+    [ACTIONS.EDITOR]: {
+      o: {...state, text: addLineBellow({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y + 1 } },
+      O: {...state, text: addLineAbove({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y } }
+    }
+  }
+
+  return handlerMapper[action.type] && handlerMapper[action.type][action.value.key] || state
+}
+const store = createStore(movement)
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      text: formatText('What are you doing here\nGo Away!'),
-      cursor: { x: 1, y: 0 },
-      mode: MODES.NORMAL_MODE
-    }
-    document.body.onkeydown = this.handleMovement.bind(this)
+  componentDidMount() {
+    console.log('sending this')
+    document.body.onkeydown = ev => { store.dispatch({ type: ACTIONS.MOVEMENT, value: ev }) }
   }
 
-  checkIfCharIs(type) {
-    const currentLine = this.getCurrentLine()
-    if (!currentLine) throw new Error('Cursor in invalid Y position!')
-    if (!['first', 'last'].includes(type)) throw new Error('Invalid cursor position type')
-
-    return {
-      first: !currentLine.value[this.state.cursor.x - 1],
-      last: !currentLine.value[this.state.cursor.x + 1],
-    }[type]
-  }
-
-  checkIfHasLineOn(type) {
-    if (!['previous', 'next'].includes(type)) throw new Error('Invalid cursor position type')
-
-    return {
-      previous: this.state.text[this.state.cursor.y - 1],
-      next: this.state.text[this.state.cursor.y + 1]
-    }[type]
-  }
-
-
-  getCurrentLine() {
-    return this.state.text.find(({ index }) => this.state.cursor.y === index)
-  }
-
-  handleMovement({ key }) {
-    const cursor = this.state.cursor
-
-    const addLineBellow = ({ text, currentCursor: { y } }) => {
-      if (text.length - 1 === y) return text.concat({ value: '¬', index: y + 1 })
-
-      return text.reduce((updatedText, line) => {
-        if (line.index < y) return updatedText.concat(line)
-        if (line.index > y) return updatedText.concat({ ...line, index: line.index + 1 })
-        if (line.index === y) return updatedText.concat([line, { value: '¬', index: y + 1 }])
-        return updatedText
-      }, [])
-    }
-
-    const addLineAbove = ({ text, currentCursor: { y } }) =>
-      text.reduce((updatedText, line) => {
-        if (line.index < y) return updatedText.concat(line)
-        if (line.index > y) return updatedText.concat({ ...line, index: line.index + 1 })
-        if (line.index === y) return updatedText.concat([{ value: '¬', index: y }, { ...line, index: y + 1 }])
-
-        return updatedText
-      }, [])
-
-    const mapActions = {
-      [MODES.NORMAL_MODE]: {
-        l: () => this.setState({
-          cursor: { ...cursor, x: this.checkIfCharIs('last') ? this.getCurrentLine().value.length - 1 : cursor.x + 1 }
-        }),
-        h: () => this.setState({
-          cursor: { ...cursor, x: this.checkIfCharIs('first') ? 0 : cursor.x - 1 }
-        }),
-        k: () => this.checkIfHasLineOn('previous') && this.setState({ cursor: { ...cursor, y: cursor.y - 1 }}),
-        j: () => this.checkIfHasLineOn('next') && this.setState({ cursor: { ...cursor, y: cursor.y + 1 }}),
-        /* These guys go to insert mode aftwerwards */
-        o: () => this.setState({ text: addLineBellow({ text: this.state.text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y + 1 } }),
-        O: () => this.setState({ text: addLineAbove({ text: this.state.text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y } })
-      }
-    }
-
-    return mapActions[this.state.mode][key] && mapActions[this.state.mode][key]()
+  componentWillUnmount() {
+    document.body.onkeydown = () => {}
   }
 
   render() {
     return (
-      <div className="App">
-        {this.state.text.map(({ index, value }) => (
-          <Line key={index} text={value} isActive={index === this.state.cursor.y} onChar={this.state.cursor.x}/>
-        ))}
-
+      <div>
+        <Pane text={store.getState().text} cursor={store.getState().cursor}/>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
+export { store }

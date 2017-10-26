@@ -1,0 +1,22 @@
+$char-size: 14px;
+$whitespace-size: $char-size/2;
+
+.char__cntr {
+  display: inline-block;
+  color: white;
+  font-size: $char-size;
+  position: relative;
+
+  &.--active:before {
+    content: '';
+    height: 100%; width: 100%;
+    position: absolute;
+    background-color: blue;
+    opacity: 0.5;
+  }
+}
+
+.char__whitespace {
+  width: $whitespace-size;
+  color: transparent;
+}
