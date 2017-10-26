@@ -7,7 +7,7 @@ const Pane = ({ text, cursor }) => {
   return (
     <div>
       {text.map(({ index, value }) => (
-        <Line key={index} text={value} isActive={index === cursor.y} onChar={cursor.x}/>
+        <Line key={index} line={value} isActive={index === cursor.y} onChar={cursor.x}/>
       ))}
     </div>
   )
