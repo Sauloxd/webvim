@@ -1,6 +1,5 @@
 /*eslint no-mixed-operators: off*/
-import { MODES, SOURCE } from '../constants'
-import { getCurrentLine } from './utils'
+import { MODES } from '../constants'
 
 const KEY = {
   ESCAPE: { value: 'Escape', code: 27 }
@@ -14,9 +13,6 @@ const insertMode = (state , action) => {
   case KEY.ESCAPE.value:
     return { ...state, mode: MODES.NORMAL_MODE }
   default:
-    console.log(`key "${key}" : keyCode "${keyCode}"`)
-    console.log(`typed inside x: ${cursor.x}, y: ${cursor.y}`)
-    console.log(text)
     return { ...state, text: updateLine(text, cursor, key), cursor: { ...cursor, x: cursor.x + 1 } }
   }
 }
