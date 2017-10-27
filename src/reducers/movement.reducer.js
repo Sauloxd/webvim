@@ -51,9 +51,10 @@ const movement = (state , action) => {
       h: () => ({...state, cursor: { ...cursor, x: cursor.x === 0 ? cursor.x  : cursor.x - 1 }}),
       k: () => checkIfHasLineOn('previous', state) && {...state, cursor: { y: cursor.y - 1, x: getLastCharIndex(getLineAbove(state), cursor.x) }},
       j: () => checkIfHasLineOn('next', state) && {...state, cursor: { y: cursor.y + 1 , x: getLastCharIndex(getLineBellow(state), cursor.x)} },
-      o: () => ({...state, text: addLineBellow({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y + 1, x: 0 } }),
-      O: () => ({...state, text: addLineAbove({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y, x: 0 } }),
-      i: () => ({...state, mode: MODES.INSERT_MODE }),
+      o: () => ({...state, mode: MODES.INSERT_MODE, text: addLineBellow({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y + 1, x: 0 } }),
+      O: () => ({...state, mode: MODES.INSERT_MODE, text: addLineAbove({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y, x: 0 } }),
+      a: () => ({...state, mode: MODES.INSERT_MODE, cursor: { ...cursor, x: cursor.x + 1 } }),
+      i: () => ({...state, mode: MODES.INSERT_MODE })
     }
   }
 
