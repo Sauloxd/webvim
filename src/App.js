@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { createStore } from 'redux'
 import { SOURCE } from './constants'
 import Pane from './components/pane'
+import { unregister } from './registerServiceWorker'
 import rootReducer from './reducers'
 import './App.css'
 
@@ -28,6 +29,6 @@ class App extends Component {
 App.propTypes = {
   mode: PropTypes.string
 }
-
+unregister()
 export default App
 export { store }

@@ -1,8 +1,6 @@
-@import 'styles/_colors.scss';
 @import 'styles/reset.scss';
 @import 'styles/fonts.scss';
 
 body {
-  color: $gray;
   font-family: 'FiraMono', 'monospace' !important
 }

@@ -1,0 +1,17 @@
+@import '../../styles/_colors';
+
+$bg1: #3c3836;
+
+.line__cntr {
+  padding: 1.5px;
+  display: flex;
+  flex-direction: 'row';
+  &.--active {
+    background-color: $bg1;
+  }
+}
+
+.line__index {
+  color: $gray;
+  margin: 0 6px;
+}
