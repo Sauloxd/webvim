@@ -43,22 +43,20 @@ const getLastCharIndex = (line, x) => {
 
 const movement = (state , action) => {
   const { cursor, text } = state
-  const { mode, command } = action
+  const { command } = action
 
   const handlerMapper = {
-    [MODES.NORMAL_MODE]: {
-      l: () => ({...state, cursor: { ...cursor, x: cursor.x === getCurrentLine(state).value.length - 1 ? cursor.x : cursor.x + 1 }}),
-      h: () => ({...state, cursor: { ...cursor, x: cursor.x === 0 ? cursor.x  : cursor.x - 1 }}),
-      k: () => checkIfHasLineOn('previous', state) && {...state, cursor: { y: cursor.y - 1, x: getLastCharIndex(getLineAbove(state), cursor.x) }},
-      j: () => checkIfHasLineOn('next', state) && {...state, cursor: { y: cursor.y + 1 , x: getLastCharIndex(getLineBellow(state), cursor.x)} },
-      o: () => ({...state, mode: MODES.INSERT_MODE, text: addLineBellow({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y + 1, x: 0 } }),
-      O: () => ({...state, mode: MODES.INSERT_MODE, text: addLineAbove({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y, x: 0 } }),
-      a: () => ({...state, mode: MODES.INSERT_MODE, cursor: { ...cursor, x: cursor.x + 1 } }),
-      i: () => ({...state, mode: MODES.INSERT_MODE })
-    }
+    l: () => ({...state, cursor: { ...cursor, x: cursor.x === getCurrentLine(state).value.length - 1 ? cursor.x : cursor.x + 1 }}),
+    h: () => ({...state, cursor: { ...cursor, x: cursor.x === 0 ? cursor.x  : cursor.x - 1 }}),
+    k: () => checkIfHasLineOn('previous', state) && {...state, cursor: { y: cursor.y - 1, x: getLastCharIndex(getLineAbove(state), cursor.x) }},
+    j: () => checkIfHasLineOn('next', state) && {...state, cursor: { y: cursor.y + 1 , x: getLastCharIndex(getLineBellow(state), cursor.x)} },
+    o: () => ({...state, mode: MODES.INSERT_MODE, text: addLineBellow({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y + 1, x: 0 } }),
+    O: () => ({...state, mode: MODES.INSERT_MODE, text: addLineAbove({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y, x: 0 } }),
+    a: () => ({...state, mode: MODES.INSERT_MODE, cursor: { ...cursor, x: cursor.x + 1 } }),
+    i: () => ({...state, mode: MODES.INSERT_MODE })
   }
 
-  return handlerMapper[mode] && handlerMapper[mode][command.key] && handlerMapper[mode][command.key]() || state
+  return command && handlerMapper[command.key] && handlerMapper[command.key]() || state
 }
 
 export default movement
