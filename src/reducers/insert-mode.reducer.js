@@ -2,16 +2,22 @@
 import { MODES } from '../constants'
 
 const KEY = {
-  ESCAPE: { value: 'Escape', code: 27 }
+  ESCAPE: { value: 'Escape', code: 27 },
+  SHIFT: { value: 'Shift', code: 16 },
+  META: { value: 'Meta', code: 91 },
+
 }
 
 const insertMode = (state , action) => {
   const { cursor, text } = state
-  const { key, keyCode } = action.command
+  const { key } = action.command
 
   switch(action.command.key) {
   case KEY.ESCAPE.value:
     return { ...state, mode: MODES.NORMAL_MODE, cursor: { ...cursor, x: cursor.x - 1 } }
+  case KEY.SHIFT.value:
+  case KEY.META.value:
+    return state
   default:
     return { ...state, text: updateLine(text, cursor, key), cursor: { ...cursor, x: cursor.x + 1 } }
   }

@@ -181,5 +181,12 @@ select[multiple] {
   /* Move the label to the top */
   vertical-align: top; }
 
+@font-face {
+  font-family: 'FiraMono';
+  src: local("FiraMono"), url("./styles/fonts/FiraMono.woff") format("woff");
+  font-weight: 100;
+  font-style: normal; }
+
 body {
-  color: #303030; }
+  color: #303030;
+  font-family: 'FiraMono', 'monospace' !important; }
