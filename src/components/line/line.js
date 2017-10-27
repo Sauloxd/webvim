@@ -9,6 +9,9 @@ const Line = ({ isActive, line, onChar }) => (
     {line.map(char => (
       <Char key={char.index} value={char.value} isActive={isActive && onChar === char.index} />
     ))}
+    {
+      isActive && onChar >= line.length && <Char value={' '} isActive={isActive && onChar >= line.length}/>
+    }
   </div>
 )
 

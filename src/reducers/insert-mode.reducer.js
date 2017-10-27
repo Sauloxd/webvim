@@ -5,8 +5,11 @@ const KEY = {
   ESCAPE: { value: 'Escape', code: 27 },
   SHIFT: { value: 'Shift', code: 16 },
   META: { value: 'Meta', code: 91 },
-
+  ALT: { value: 'Alt', code: 18 },
+  BACKSPACE: { value : 'Backspace', code: 8 }
 }
+
+const positiveOrZero = x => x < 1 ? 0 : x - 1
 
 const insertMode = (state , action) => {
   const { cursor, text } = state
@@ -14,12 +17,15 @@ const insertMode = (state , action) => {
 
   switch(action.command.key) {
   case KEY.ESCAPE.value:
-    return { ...state, mode: MODES.NORMAL_MODE, cursor: { ...cursor, x: cursor.x - 1 } }
+    return { ...state, mode: MODES.NORMAL_MODE, cursor: { ...cursor, x: positiveOrZero(cursor.x) } }
+  case KEY.BACKSPACE.value:
+    return { ...state, text: backspaceCharOnCursorY(text, cursor, key), cursor: { ...cursor, x: cursor.x - 1 } }
   case KEY.SHIFT.value:
   case KEY.META.value:
+  case KEY.ALT.value:
     return state
   default:
-    return { ...state, text: updateLine(text, cursor, key), cursor: { ...cursor, x: cursor.x + 1 } }
+    return { ...state, text: addCharOnCursorY(text, cursor, key), cursor: { ...cursor, x: cursor.x + 1 } }
   }
 }
 
@@ -27,8 +33,8 @@ const insertMode = (state , action) => {
 I think it's bad to manipulate the whole text.
 Maybe i should index by line?
 */
-const updateLine = (text, cursor, newChar) => {
-  const charBehindCursorIndex = cursor.x - 1 < 0 ? 0 : cursor.x - 1
+const addCharOnCursorY = (text, cursor, newChar) => {
+  const charBehindCursorIndex = positiveOrZero(cursor.x)
   return text.map(line => {
     if(line.index !== cursor.y) return line
 
@@ -45,6 +51,25 @@ const updateLine = (text, cursor, newChar) => {
             return newLine.concat({ ...char, index: char.index }, { value: newChar, index: char.index + 1 })
           }
         }
+
+        return newLine
+      }, [])
+    }
+  })
+}
+
+const backspaceCharOnCursorY = (text, cursor) => {
+  if (cursor.x === 0) return text //Cant remove backwards on index 0
+
+  return text.map(line => {
+    if (line.index !== cursor.y) return line
+    return {
+      ...line,
+      value: line.value.reduce((newLine, char) => {
+        if (char.index < cursor.x - 1) return newLine.concat(char)
+        if (char.index > cursor.x - 1) return newLine.concat({ ...char, index: char.index - 1 })
+        if (char.index === cursor.x - 1) return newLine
+
         return newLine
       }, [])
     }
