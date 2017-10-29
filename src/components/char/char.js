@@ -15,7 +15,7 @@ const Char = ({ value, isActive }) => {
       .concat(value === ' ' ? whitespaceStyle : [])
   )
 
-  const charClassName = `char  ${value === ' ' && 'invisible'}`
+  const charClassName = `char  ${value === ' ' && 'invisible' || ''}`
 
   /* the ø symbol is a marker for whitespace */
   return (

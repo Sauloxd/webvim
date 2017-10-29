@@ -1,16 +1,10 @@
 /*eslint no-mixed-operators: off*/
 import { MODES } from '../constants'
-import { getCurrentLine, getLineAbove, getLineBellow } from './utils'
-
-const checkIfHasLineOn = (type, state) => {
-  if (!['previous', 'next'].includes(type)) throw new Error('Invalid cursor position type')
-
-  const response = {
-    previous: state.text[state.cursor.y - 1],
-    next: state.text[state.cursor.y + 1]
-  }[type]
-  return response
-}
+import {
+  getCurrentLine,
+  getLineAbove,
+  checkIfHasLineOn,
+  getLineBellow } from './utils'
 
 /*
   Maybe create a class Char, and Line to keep the code understandable
@@ -38,7 +32,7 @@ const addLineAbove = ({ text, currentCursor: { y } }) =>
 
 const getLastCharIndex = (line, x) => {
   const lastChar = line.value.slice(-1)[0]
-  return lastChar.index < x ? lastChar.index : x
+  return lastChar && lastChar.index < x ? lastChar.index : x || 0
 }
 
 const movement = (state , action) => {
