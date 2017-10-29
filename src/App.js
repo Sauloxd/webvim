@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { createStore } from 'redux'
 import { SOURCE } from './constants'
 import Pane from './components/pane'
+import Footer from './components/footer'
 import { unregister } from './registerServiceWorker'
 import rootReducer from './reducers'
 import './App.css'
@@ -19,9 +20,12 @@ class App extends Component {
   }
 
   render() {
+    const { text, cursor } = store.getState()
+
     return (
       <div>
-        <Pane text={store.getState().text} cursor={store.getState().cursor}/>
+        <Pane text={text} cursor={cursor}/>
+        <Footer cursor={cursor}/>
       </div>
     )
   }

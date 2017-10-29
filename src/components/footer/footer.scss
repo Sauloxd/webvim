@@ -1,0 +1,79 @@
+@import '../../styles/_colors.scss';
+
+.footer__container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: $bg1;
+}
+
+.footer__status__container {
+  display: flex;
+  flex-direction: row;
+}
+
+$size: 9px;
+.footer__vim-mode {
+  background-color: $fg4;
+  color: $bg;
+  padding: 0 $size;
+  z-index: 1;
+
+  &.arrow-right:after {
+    border-left-color: $fg4;
+  }
+}
+
+.footer__login-status {
+  background-color: $bg2;
+  color: $fg4;
+  padding-left: 3 * $size;
+  padding-right: $size;
+
+  &.arrow-right:after {
+    border-left-color: $bg2;
+  }
+}
+
+.arrow-right {
+  position: relative;
+  &:after {
+    content: '';
+    width: $size;
+    height: $size;
+    border: 9.5px solid transparent;
+    border-left-color: $bg2;
+    position: absolute;
+    right: -19px;
+    top: 0.4px;
+  }
+}
+
+.arrow-left {
+  position: relative;
+  &:after {
+    content: '';
+    width: $size;
+    height: $size;
+    border: 9.5px solid transparent;
+    border-right-color: $bg2;
+    position: absolute;
+    left: -19px;
+    top: 0.4px;
+  }
+}
+
+.footer__file-name {
+  flex: 1;
+  padding-left: 3 * $size;
+  color: $fg4;
+}
+
+.footer__file-status{
+  background-color: $fg4;
+  color: $bg;
+  padding: 0 $size;
+  &.arrow-left:after {
+    border-right-color: $fg4;
+  }
+}

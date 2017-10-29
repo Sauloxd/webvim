@@ -1,6 +1,8 @@
 @import 'styles/reset.scss';
 @import 'styles/fonts.scss';
+@import 'styles/_colors.scss';
 
 body {
-  font-family: 'FiraMono', 'monospace' !important
+  font-family: 'FiraMono', 'monospace' !important;
+  background-color: $bg;
 }

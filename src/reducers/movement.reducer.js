@@ -47,7 +47,10 @@ const movement = (state , action) => {
     o: () => ({...state, mode: MODES.INSERT_MODE, text: addLineBellow({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y + 1, x: 0 } }),
     O: () => ({...state, mode: MODES.INSERT_MODE, text: addLineAbove({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y, x: 0 } }),
     a: () => ({...state, mode: MODES.INSERT_MODE, cursor: { ...cursor, x: cursor.x + 1 } }),
-    i: () => ({...state, mode: MODES.INSERT_MODE })
+    A: () => ({...state, mode: MODES.INSERT_MODE, cursor: { ...cursor, x: getCurrentLine(state).value.length } }),
+    i: () => ({...state, mode: MODES.INSERT_MODE }),
+    0: () => ({...state, cursor: {...cursor, x: 0}}),
+    '$': () => ({...state, cursor: { ...cursor, x: getCurrentLine(state).value.length }})
   }
 
   return command && handlerMapper[command.key] && handlerMapper[command.key]() || state

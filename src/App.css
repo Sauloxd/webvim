@@ -188,4 +188,5 @@ select[multiple] {
   font-style: normal; }
 
 body {
-  font-family: 'FiraMono', 'monospace' !important; }
+  font-family: 'FiraMono', 'monospace' !important;
+  background-color: #282828; }
