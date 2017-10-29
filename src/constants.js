@@ -1,6 +1,6 @@
 export const MODES = {
-  INSERT_MODE: 'insert_mode',
-  NORMAL_MODE: 'normal_mode'
+  INSERT_MODE: 'insert',
+  NORMAL_MODE: 'normal'
 }
 
 export const SOURCE = {

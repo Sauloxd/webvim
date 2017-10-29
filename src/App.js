@@ -20,12 +20,12 @@ class App extends Component {
   }
 
   render() {
-    const { text, cursor } = store.getState()
+    const { text, cursor, mode } = store.getState()
 
     return (
       <div>
         <Pane text={text} cursor={cursor}/>
-        <Footer cursor={cursor}/>
+        <Footer cursor={cursor} text={text} mode={mode}/>
       </div>
     )
   }
