@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { createStore } from 'redux'
 import { isEmpty } from 'lodash'
-import { SOURCE } from './constants'
+import { SOURCE, KEY } from './constants'
 import Pane from './components/pane'
 import Layout from './components/layout'
 import { unregister } from './registerServiceWorker'
@@ -13,7 +13,33 @@ const store = createStore(rootReducer)
 
 class App extends Component {
   componentDidMount() {
-    document.body.onkeydown = ev => { store.dispatch({ type: SOURCE.KEYBOARD, mode: store.getState().mode, command: { key: ev.key, keyCode: ev.keyCode } }) }
+    document.body.onkeydown = (() => {
+      let keys = []
+      let timeout
+
+      const comboKeys = [
+        KEY.CTRL.value
+      ]
+
+      return ev => {
+        if (comboKeys.includes(ev.key)) {
+          if (!keys.includes(ev.key)) {
+            timeout && clearTimeout(timeout);
+            timeout = setTimeout(() => { keys = [] }, 500)
+            keys.push({ value: ev.key, keyCode: ev.keyCode })
+            return
+          }
+        } else {
+          store.dispatch({
+            type: SOURCE.KEYBOARD,
+            mode: store.getState().mode,
+            command: { key: keys.length > 0 ? keys.reduce((comboKey, key) => comboKey + key.value.split('')[0] + '-', '') + ev.key : ev.key, keyCode: keys.length > 0 ? 'CUSTOM' : ev.keyCode }
+          })
+          keys = []
+          timeout && clearTimeout(timeout);
+        }
+      }
+    })()
   }
 
   componentWillUnmount() {

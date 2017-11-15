@@ -1,6 +1,6 @@
 import { MODES, TUTORIAL_TEXT } from '../constants'
 import { flatten, clone, isEmpty } from 'lodash'
-import normalMode from './movement.reducer.js'
+import normalMode from './normal-mode.reducer.js'
 import insertMode from './insert-mode.reducer.js'
 const formatText = text => text.split('\n')
   .filter(Boolean) // This removes empty lines. @TODO add empty space!

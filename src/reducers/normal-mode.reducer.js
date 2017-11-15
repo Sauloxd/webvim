@@ -51,7 +51,8 @@ const normalMode = ({ layout, currentPane }, action) => {
     A: ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: getCurrentLine({ ...pane, cursor }).value.length } }),
     i: pane => pane,
     0: ({ cursor, ...pane }) => ({...pane, cursor: {...cursor, x: 0}}),
-    '$': ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: getCurrentLine({ ...pane, cursor }).value.length }})
+    '$': ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: getCurrentLine({ ...pane, cursor }).value.length }}),
+    ['c-h']: pane => { console.log('CTRL H!!!!!'); return pane }
   }
 
   const changeModeKeys = {

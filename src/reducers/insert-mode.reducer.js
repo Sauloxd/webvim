@@ -1,15 +1,6 @@
 /*eslint no-mixed-operators: off*/
-import { MODES } from '../constants'
+import { MODES, KEY } from '../constants'
 import { paneModifierOnLayout } from './utils'
-
-const KEY = {
-  ESCAPE: { value: 'Escape', code: 27 },
-  SHIFT: { value: 'Shift', code: 16 },
-  META: { value: 'Meta', code: 91 },
-  ALT: { value: 'Alt', code: 18 },
-  ENTER: { value: 'Enter', code: 13 },
-  BACKSPACE: { value : 'Backspace', code: 8 }
-}
 
 const positiveOrZero = x => x < 1 ? 0 : x - 1
 
