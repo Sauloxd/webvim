@@ -5,7 +5,8 @@ import {
   getLineAbove,
   checkIfHasLineOn,
   getLineBellow,
-  paneModifierOnLayout
+  paneModifierOnLayout,
+  addColumnPane
 } from './utils'
 
 /*
@@ -51,8 +52,7 @@ const normalMode = ({ layout, currentPane }, action) => {
     A: ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: getCurrentLine({ ...pane, cursor }).value.length } }),
     i: pane => pane,
     0: ({ cursor, ...pane }) => ({...pane, cursor: {...cursor, x: 0}}),
-    '$': ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: getCurrentLine({ ...pane, cursor }).value.length }}),
-    ['c-h']: pane => { console.log('CTRL H!!!!!'); return pane }
+    '$': ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: getCurrentLine({ ...pane, cursor }).value.length }})
   }
 
   const changeModeKeys = {
@@ -63,9 +63,13 @@ const normalMode = ({ layout, currentPane }, action) => {
     i: MODES.INSERT_MODE
   }
 
+  const layoutActions = {
+    ['C-d']: addColumnPane
+  }
+
   return {
     mode: command && changeModeKeys[command.key] || MODES.NORMAL_MODE,
-    layout: paneModifierOnLayout({ layout, currentPane, paneModifier: command && paneActions[command.key] })
+    layout: command && layoutActions[command.key] && layoutActions[command.key]({ layout, currentPane }) || paneModifierOnLayout({ layout, currentPane, paneModifier: command && paneActions[command.key] || (i => i) })
   }
 }
 

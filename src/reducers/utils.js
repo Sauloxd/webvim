@@ -12,7 +12,13 @@ export const checkIfHasLineOn = (type, state) => {
     next: state.text[state.cursor.y + 1]
   }[type]
   return response
+
 }
+export const formatText = text => text.split('\n')
+  .filter(Boolean) // This removes empty lines. @TODO add empty space!
+  .map((line, index) =>
+    ({ index, value: line.split('').map((char, index) =>
+      ({ index, value: char })) }))
 
 export const findLayoutLeaves = node => {
   if (node.type !== 'pane' && isEmpty(node.value)) throw new Error('Error when trying to find leaves on layout tree!', node)
@@ -37,4 +43,48 @@ export const paneModifierOnLayout = ({ layout, currentPane, paneModifier }) => {
 export const activatePane = ({ layout, targetPane }) => {
   const layoutWithoutActivePanes = paneModifierOnLayout({ layout, currentPane: findLayoutLeaves(layout).find(pane => pane.active), paneModifier: pane => ({ ...pane, active: false }) })
   return paneModifierOnLayout({ layout: layoutWithoutActivePanes, currentPane: targetPane, paneModifier: pane => ({ ...pane, active: true }) })
+}
+
+export const addColumnPane = ({ layout, currentPane }) => {
+  const clonedLayout = clone(layout, true)
+
+  const paneParentReference = currentPane.index.slice(0, -1)
+    .reduce((paneReference, panePosition) =>
+      paneReference.value[panePosition], clonedLayout)
+
+  if (paneParentReference.type === 'column') {
+    paneParentReference.value = paneParentReference.value
+      .reduce((reorderedPanes, pane) => {
+        if (pane.index.slice(-1)[0] < currentPane.index.slice(-1)[0]) return reorderedPanes.concat(pane)
+        if (pane.index.slice(-1)[0] === currentPane.index.slice(-1)[0])
+          return reorderedPanes.concat([{...currentPane, active: false}, {
+            type: 'pane',
+            index: paneParentReference.index.concat(currentPane.index.slice(-1)[0] + 1),
+            text: formatText(' '),
+            cursor: { x: 0, y: 0 },
+            active: true
+          }])
+        if (pane.index.slice(-1)[0] > currentPane.index.slice(-1)[0]) return reorderedPanes.concat({...pane, index: pane.index.map((level, index, array) => index === array.length - 1? Number(level) + 1 : level)})
+      }, [])
+
+    return clonedLayout
+  } else {
+    const newPane = {
+      type: 'pane',
+      index: currentPane.index,
+      text: formatText(' '),
+      cursor: { x: 0, y: 0 },
+      active: false
+    }
+
+    Object.assign(paneParentReference.value, {
+      [currentPane.index.slice(-1)]: {
+        type: 'column',
+        index: currentPane.index,
+        value: [{...currentPane, active: false}, {...newPane, active: true}].map((pane, i) => ({...pane, index: pane.index.concat(i)}))
+      }
+    })
+
+    return clonedLayout
+  }
 }

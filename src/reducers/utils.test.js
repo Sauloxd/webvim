@@ -1,7 +1,8 @@
 import {
   findLayoutLeaves,
   paneModifierOnLayout,
-  activatePane
+  activatePane,
+  addColumnPane
 } from './utils'
 
 /* *
@@ -104,7 +105,7 @@ it('Should deactivate the current pane, and activate a given pane', () => {
   }
   const layout = {
     type: 'row',
-    index: [-1],
+    index: [],
     value: [{
       type: 'pane',
       index: [0],
@@ -119,7 +120,7 @@ it('Should deactivate the current pane, and activate a given pane', () => {
   expect(activatePane({ layout, targetPane }))
     .toEqual({
       type: 'row',
-      index: [-1],
+      index: [],
       value: [{
         type: 'pane',
         index: [0],
@@ -128,6 +129,106 @@ it('Should deactivate the current pane, and activate a given pane', () => {
         type: 'pane',
         index: [1],
         active: false
+      }]
+    })
+})
+
+it('Should add a new column pane', () => {
+  const currentPane = {
+    type: 'pane',
+    index: [1],
+    active: true
+  }
+  const layout = {
+    type: 'row',
+    index: [],
+    value: [{
+      type: 'pane',
+      index: [0],
+      active: false
+    }, {
+      type: 'pane',
+      index: [1],
+      active: true
+    }]
+  }
+
+  expect(addColumnPane({ layout, currentPane }))
+    .toEqual({
+      type: 'row',
+      index: [],
+      value: [{
+        type: 'pane',
+        index: [0],
+        active: false
+      }, {
+        type: 'column',
+        index: [1],
+        value: [{
+          type: 'pane',
+          index: [1, 0],
+          active: false
+        }, {
+          type: 'pane',
+          index: [1, 1],
+          text: [{
+            index: 0,
+            value: [{
+              index: 0,
+              value: ' ',
+            }]
+          }],
+          cursor: {x: 0, y:0},
+          active: true
+        }]
+      }]
+    })
+})
+
+it('Should add a new column pane, in a column parent pane', () => {
+  const currentPane = {
+    type: 'pane',
+    index: [1],
+    active: true
+  }
+  const layout = {
+    type: 'column',
+    index: [],
+    value: [{
+      type: 'pane',
+      index: [0],
+      active: false
+    }, {
+      type: 'pane',
+      index: [1],
+      active: true
+    }]
+  }
+
+  expect(addColumnPane({ layout, currentPane }))
+    .toEqual({
+      type: 'column',
+      index: [],
+      value: [{
+        type: 'pane',
+        index: [0],
+        active: false
+      }, {
+        type: 'pane',
+        index: [1],
+        active: false
+      }, {
+        type: 'pane',
+        index: [2],
+        text: [{
+          index: 0,
+          value: [{
+            index: 0,
+            value: ' ',
+          }]
+        }],
+        cursor: {x: 0, y:0},
+        active: true
       }]
     })
 })

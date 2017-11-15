@@ -35,7 +35,7 @@ const formatText = text => text.split('\n')
 
 export const layout = {
   type: 'row',
-  index: [-1],
+  index: [],
   value: [{
     type: 'column',
     index: [0],
