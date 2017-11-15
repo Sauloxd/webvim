@@ -4,7 +4,9 @@ import {
   getCurrentLine,
   getLineAbove,
   checkIfHasLineOn,
-  getLineBellow } from './utils'
+  getLineBellow,
+  paneModifierOnLayout
+} from './utils'
 
 /*
   Maybe create a class Char, and Line to keep the code understandable
@@ -35,25 +37,35 @@ const getLastCharIndex = (line, x) => {
   return lastChar && lastChar.index < x ? lastChar.index : x || 0
 }
 
-const movement = (action, pane) => {
-  const { cursor, text } =pane
+const normalMode = ({ layout, currentPane }, action) => {
   const { command } = action
 
-  const handlerMapper = {
-    l: () => ({...pane, cursor: { ...cursor, x: cursor.x === getCurrentLine(pane).value.length - 1 ? cursor.x : cursor.x + 1 }}),
-    h: () => ({...pane, cursor: { ...cursor, x: cursor.x === 0 ? cursor.x  : cursor.x - 1 }}),
-    k: () => checkIfHasLineOn('previous', pane) && {...pane, cursor: { y: cursor.y - 1, x: getLastCharIndex(getLineAbove(pane), cursor.x) }},
-    j: () => checkIfHasLineOn('next', pane) && {...pane, cursor: { y: cursor.y + 1 , x: getLastCharIndex(getLineBellow(pane), cursor.x)} },
-    o: () => ({...pane, mode: MODES.INSERT_MODE, text: addLineBellow({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y + 1, x: 0 } }),
-    O: () => ({...pane, mode: MODES.INSERT_MODE, text: addLineAbove({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y, x: 0 } }),
-    a: () => ({...pane, mode: MODES.INSERT_MODE, cursor: { ...cursor, x: cursor.x + 1 } }),
-    A: () => ({...pane, mode: MODES.INSERT_MODE, cursor: { ...cursor, x: getCurrentLine(pane).value.length } }),
-    i: () => ({...pane, mode: MODES.INSERT_MODE }),
-    0: () => ({...pane, cursor: {...cursor, x: 0}}),
-    '$': () => ({...pane, cursor: { ...cursor, x: getCurrentLine(pane).value.length }})
+  const paneActions = {
+    l: ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: cursor.x === getCurrentLine({...pane, cursor}).value.length - 1 ? cursor.x : cursor.x + 1 }}),
+    h: ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: cursor.x === 0 ? cursor.x  : cursor.x - 1 }}),
+    k: ({ cursor, ...pane }) => checkIfHasLineOn('previous', { ...pane, cursor }) && {...pane, cursor: { y: cursor.y - 1, x: getLastCharIndex(getLineAbove({ ...pane, cursor }), cursor.x) }},
+    j: ({ cursor, ...pane }) => checkIfHasLineOn('next', { ...pane, cursor }) && {...pane, cursor: { y: cursor.y + 1 , x: getLastCharIndex(getLineBellow({ ...pane, cursor }), cursor.x)} },
+    o: ({ cursor, text, ...pane }) => ({...pane, text: addLineBellow({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y + 1, x: 0 } }),
+    O: ({ cursor, text, ...pane }) => ({...pane, text: addLineAbove({ text, currentCursor: cursor }), cursor: { ...cursor, y: cursor.y, x: 0 } }),
+    a: ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: cursor.x + 1 } }),
+    A: ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: getCurrentLine({ ...pane, cursor }).value.length } }),
+    i: pane => pane,
+    0: ({ cursor, ...pane }) => ({...pane, cursor: {...cursor, x: 0}}),
+    '$': ({ cursor, ...pane }) => ({...pane, cursor: { ...cursor, x: getCurrentLine({ ...pane, cursor }).value.length }})
   }
 
-  return command && handlerMapper[command.key] && handlerMapper[command.key]() || pane
+  const changeModeKeys = {
+    o: MODES.INSERT_MODE,
+    O: MODES.INSERT_MODE,
+    a: MODES.INSERT_MODE,
+    A: MODES.INSERT_MODE,
+    i: MODES.INSERT_MODE
+  }
+
+  return {
+    mode: command && changeModeKeys[command.key] || MODES.NORMAL_MODE,
+    layout: paneModifierOnLayout({ layout, currentPane, paneModifier: command && paneActions[command.key] })
+  }
 }
 
-export default movement
+export default normalMode

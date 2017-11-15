@@ -19,7 +19,7 @@ const Footer = ({ text, cursor, active, mode }) => {
   )}
 
 Footer.propTypes = {
-  text: PropTypes.object,
+  text: PropTypes.array,
   cursor: PropTypes.object,
   active: PropTypes.bool,
   mode: PropTypes.string

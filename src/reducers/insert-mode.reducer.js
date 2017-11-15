@@ -1,5 +1,6 @@
 /*eslint no-mixed-operators: off*/
 import { MODES } from '../constants'
+import { paneModifierOnLayout } from './utils'
 
 const KEY = {
   ESCAPE: { value: 'Escape', code: 27 },
@@ -12,23 +13,26 @@ const KEY = {
 
 const positiveOrZero = x => x < 1 ? 0 : x - 1
 
-const insertMode = (action, pane) => {
-  const { cursor, text } = pane
-  const { key } = action.command
+const insertMode = ({ layout, currentPane }, action) => {
+  const { command } = action
 
-  switch(action.command.key) {
-  case KEY.ESCAPE.value:
-    return { ...pane, mode: MODES.NORMAL_MODE, cursor: { ...cursor, x: positiveOrZero(cursor.x) } }
-  case KEY.BACKSPACE.value:
-    return handleBackspace(pane)
-  case KEY.ENTER.value:
-    return handleEnter(pane)
-  case KEY.SHIFT.value:
-  case KEY.META.value:
-  case KEY.ALT.value:
-    return pane
-  default:
-    return { ...pane, text: addCharOnCursorY(text, cursor, key), cursor: { ...cursor, x: cursor.x + 1 } }
+  const paneActions = {
+    [KEY.ESCAPE.value]: ({ cursor, ...pane }) => ({ ...pane, mode: MODES.NORMAL_MODE, cursor: { ...cursor, x: positiveOrZero(cursor.x) } }),
+    [KEY.BACKSPACE.value]: pane => handleBackspace(pane),
+    [KEY.ENTER.value]: pane => handleEnter(pane),
+    [KEY.SHIFT.value]: pane => pane,
+    [KEY.META.value]: pane => pane,
+    [KEY.ALT.value]: pane => pane,
+    default: ({ pane, cursor, text }) => ({ ...pane, text: addCharOnCursorY(text, cursor, command.key), cursor: { ...cursor, x: cursor.x + 1 } })
+  }
+
+  const changeModeKeys = {
+    [KEY.ESCAPE.value]: MODES.NORMAL_MODE
+  }
+
+  return {
+    mode: command && changeModeKeys[command.key] || MODES.INSERT_MODE,
+    layout: paneModifierOnLayout({ layout, currentPane, paneModifier: command && paneActions[command.key] || paneActions.default })
   }
 }
 
@@ -61,16 +65,16 @@ const addCharOnCursorY = (text, cursor, newChar) => {
   })
 }
 
-const joinCurrentLineWithAboveLine = state => {
-  const { text, cursor } = state;
+const joinCurrentLineWithAboveLine = pane => {
+  const { text, cursor } = pane;
   const previousLine = text.find(line => line.index === cursor.y - 1)
   const currentLine = text.find(line => line.index === cursor.y)
 
-  if (!previousLine) return state
+  if (!previousLine) return pane
 
   return ({
-    ...state,
-    cursor: { ...cursor, x: previousLine.value.length - 1, y: cursor.y - 1 },
+    ...pane,
+    cursor: { ...cursor, x: previousLine.value.length, y: cursor.y - 1 },
     text: text.filter(line => line.index !== cursor.y).map(line => {
       if (line.index < cursor.y - 1) return line
       if (line.index === cursor.y - 1) return ({
@@ -84,12 +88,12 @@ const joinCurrentLineWithAboveLine = state => {
   })
 }
 
-const handleBackspace = state => {
-  const { text, cursor } = state
-  if (cursor.x === 0) return joinCurrentLineWithAboveLine(state)
+const handleBackspace = pane => {
+  const { text, cursor } = pane
+  if (cursor.x === 0) return joinCurrentLineWithAboveLine(pane)
 
   return ({
-    ...state,
+    ...pane,
     cursor: { ...cursor, x: cursor.x - 1 },
     text: text.map(line => {
       if (line.index !== cursor.y) return line
@@ -107,19 +111,19 @@ const handleBackspace = state => {
   })
 }
 
-const handleEnter = state => ({
-  ...state,
-  cursor: { ...state.cursor, x: 0, y: state.cursor.y + 1 },
-  text: state.text.reduce((newText, line) => {
-    if (line.index < state.cursor.y) return newText.concat(line)
-    if (line.index === state.cursor.y) return newText.concat({
+const handleEnter = pane => ({
+  ...pane,
+  cursor: { ...pane.cursor, x: 0, y: pane.cursor.y + 1 },
+  text: pane.text.reduce((newText, line) => {
+    if (line.index < pane.cursor.y) return newText.concat(line)
+    if (line.index === pane.cursor.y) return newText.concat({
       ...line,
-      value: line.value.slice(0, state.cursor.x)
+      value: line.value.slice(0, pane.cursor.x)
     }, {
       index: line.index + 1,
-      value: line.value.slice(state.cursor.x).map(char => ({ ...char, index: char.index - state.cursor.x }))
+      value: line.value.slice(pane.cursor.x).map(char => ({ ...char, index: char.index - pane.cursor.x }))
     })
-    if (line.index > state.cursor.y) return newText.concat({ ...line, index: line.index + 1 })
+    if (line.index > pane.cursor.y) return newText.concat({ ...line, index: line.index + 1 })
 
     return
   }, [])

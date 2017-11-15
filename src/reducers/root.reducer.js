@@ -1,6 +1,6 @@
 import { MODES, TUTORIAL_TEXT } from '../constants'
 import { flatten, clone, isEmpty } from 'lodash'
-import movement from './movement.reducer.js'
+import normalMode from './movement.reducer.js'
 import insertMode from './insert-mode.reducer.js'
 const formatText = text => text.split('\n')
   .filter(Boolean) // This removes empty lines. @TODO add empty space!
@@ -80,17 +80,18 @@ export default (state = {
   layout
 }, action) => {
   const currentPane = findLayoutLeaves(layout).find(pane => pane.active)
+  console.log(state.mode)
 
   switch(state.mode) {
   case MODES.NORMAL_MODE:
     return {
       ...state,
-      layout: paneModifierOnLayout({ layout, paneIndex: currentPane.index, paneModifier: movement.bind(null, action) })
+      ...normalMode({ layout, currentPane }, action)
     }
   case MODES.INSERT_MODE:
     return {
       ...state,
-      layout: paneModifierOnLayout({ layout, paneIndex: currentPane.index, paneModifier: insertMode.bind(null, action) })
+      ...insertMode({ layout, currentPane }, action)
     }
   default:
     return state

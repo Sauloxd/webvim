@@ -1,5 +1,8 @@
+@import '../../styles/_colors.scss';
+
 .pane {
   height: 100%;
   position: relative;
   flex: 1;
+  border-left: 1px dashed $fg;
 }
