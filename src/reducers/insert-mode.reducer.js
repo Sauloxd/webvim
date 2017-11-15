@@ -12,23 +12,23 @@ const KEY = {
 
 const positiveOrZero = x => x < 1 ? 0 : x - 1
 
-const insertMode = (state , action) => {
-  const { cursor, text } = state
+const insertMode = (action, pane) => {
+  const { cursor, text } = pane
   const { key } = action.command
 
   switch(action.command.key) {
   case KEY.ESCAPE.value:
-    return { ...state, mode: MODES.NORMAL_MODE, cursor: { ...cursor, x: positiveOrZero(cursor.x) } }
+    return { ...pane, mode: MODES.NORMAL_MODE, cursor: { ...cursor, x: positiveOrZero(cursor.x) } }
   case KEY.BACKSPACE.value:
-    return handleBackspace(state)
+    return handleBackspace(pane)
   case KEY.ENTER.value:
-    return handleEnter(state)
+    return handleEnter(pane)
   case KEY.SHIFT.value:
   case KEY.META.value:
   case KEY.ALT.value:
-    return state
+    return pane
   default:
-    return { ...state, text: addCharOnCursorY(text, cursor, key), cursor: { ...cursor, x: cursor.x + 1 } }
+    return { ...pane, text: addCharOnCursorY(text, cursor, key), cursor: { ...cursor, x: cursor.x + 1 } }
   }
 }
 
