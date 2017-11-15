@@ -3,18 +3,29 @@ import PropTypes from 'prop-types'
 import Line from '../line'
 import './pane.css'
 import Footer from '../footer'
+import { store } from '../../reducers/root.reducer'
 
 const commonStyle = 'pane'
 
 const concatStyles = styles => styles.reduce((res, style) => `${res} ${style}`, '')
-const Pane = ({ index, text, cursor, active, mode }) => {
+const Pane = (pane) => {
+  const { index, text, cursor, active, mode } = pane
   const className = concatStyles(
     [commonStyle]
       .concat(active ? '--active' : [])
   )
 
+  const activatePane = () => {
+    console.log('dispatching...')
+    store.dispatch({
+      type: 'MOUSE',
+      command: 'activate',
+      on: pane
+    })
+  }
+
   return (
-    <div className={className} onClick={() => { console.log('clicked pane') }}>
+    <div className={className} onClick={activatePane}>
       {text.map((line) => (
         <Line key={index.join('-') + line.index} line={line} isActive={line.index === cursor.y && active} onChar={cursor.x}/>
       ))}

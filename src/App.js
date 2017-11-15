@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { createStore } from 'redux'
 import { isEmpty } from 'lodash'
 import { SOURCE, KEY } from './constants'
 import Pane from './components/pane'
 import Layout from './components/layout'
 import { unregister } from './registerServiceWorker'
-import rootReducer from './reducers'
+import { store } from './reducers'
 import './App.css'
-
-const store = createStore(rootReducer)
 
 class App extends Component {
   componentDidMount() {

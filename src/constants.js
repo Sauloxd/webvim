@@ -25,3 +25,41 @@ Stay tuned for features to come:\n
 - [ ] Save files in a directory tree style\n
 - [ ] Have a way to sign-in using a command like :login -u saulo -p *****\n
 `
+
+const formatText = text => text.split('\n')
+  .filter(Boolean) // This removes empty lines. @TODO add empty space!
+  .map((line, index) =>
+    ({ index, value: line.split('').map((char, index) =>
+      ({ index, value: char })) }))
+
+export const layout = {
+  type: 'row',
+  index: [-1],
+  value: [{
+    type: 'column',
+    index: [0],
+    value: [{
+      type: 'pane',
+      index: [0, 0],
+      text: formatText(TUTORIAL_TEXT),
+      cursor: { x: 0, y: 0 },
+      active: true
+    }, {
+      type: 'pane',
+      index: [0, 1],
+      text: formatText('pane 2'),
+      cursor: { x: 0, y: 0 },
+      active: false
+    }]
+  }, {
+    type: 'row',
+    index: [1],
+    value: [{
+      type: 'pane',
+      index: [1, 0],
+      text: formatText('pane 3'),
+      cursor: { x: 0, y: 0 },
+      active: false
+    }]
+  }]
+}
