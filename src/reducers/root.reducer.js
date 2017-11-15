@@ -2,9 +2,11 @@ import { MODES, TUTORIAL_TEXT } from '../constants'
 import { flatten, clone, isEmpty } from 'lodash'
 import movement from './movement.reducer.js'
 import insertMode from './insert-mode.reducer.js'
-const formatText = text => text.split('\n').filter(Boolean).map((line, index) =>
-  ({ index, value: line.split('').map((char, index) =>
-    ({ index, value: char })) }))
+const formatText = text => text.split('\n')
+  .filter(Boolean) // This removes empty lines. @TODO add empty space!
+  .map((line, index) =>
+    ({ index, value: line.split('').map((char, index) =>
+      ({ index, value: char })) }))
 const layout = {
   type: 'row',
   value: [{
@@ -18,7 +20,7 @@ const layout = {
     }, {
       type: 'pane',
       index: [0, 0, 1],
-      text: formatText(TUTORIAL_TEXT),
+      text: formatText('pane 2'),
       cursor: { x: 0, y: 0 },
       active: false
     }]
@@ -27,7 +29,7 @@ const layout = {
     value: [{
       type: 'pane',
       index: [0, 1, 0],
-      text: formatText(TUTORIAL_TEXT),
+      text: formatText('pane 3'),
       cursor: { x: 0, y: 0 },
       active: false
     }]
@@ -38,13 +40,7 @@ const layout = {
       value: [{
         type: 'pane',
         index: [2, 0, 0],
-        text: formatText(TUTORIAL_TEXT),
-        cursor: { x: 0, y: 0 },
-        active: false
-      }, {
-        type: 'pane',
-        index: 4,
-        text: formatText(TUTORIAL_TEXT),
+        text: formatText('pane 4'),
         cursor: { x: 0, y: 0 },
         active: false
       }]
@@ -53,7 +49,7 @@ const layout = {
       value: [{
         type: 'pane',
         index: [2, 1, 0],
-        text: formatText(TUTORIAL_TEXT),
+        text: formatText('pane 5'),
         cursor: { x: 0, y: 0 },
         active: true
       }]

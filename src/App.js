@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { createStore } from 'redux'
+import { isEmpty } from 'lodash'
 import { SOURCE } from './constants'
 import Pane from './components/pane'
 import Footer from './components/footer'
@@ -19,13 +20,32 @@ class App extends Component {
     document.body.onkeydown = () => {}
   }
 
+  renderPanes(layout) {
+    const findLayoutLeaves = node => {
+      if (node.type !== 'pane' && isEmpty(node.value)) throw new Error('Error when trying to find leaves on layout tree!', node)
+      if (node.type === 'pane') return <Pane key={node.index.join('-')} index={node.index} text={node.text} cursor={node.cursor} />
+      // Fix this
+      return (
+        <div className={node.type} key={Math.floor(Math.random() * 1000)}>
+          {
+            node.value.map(findLayoutLeaves)
+          }
+        </div>
+      )
+    }
+
+    return findLayoutLeaves(layout)
+  }
+
   render() {
-    const { text, cursor, mode } = store.getState()
+    const { mode, layout } = store.getState()
 
     return (
       <div>
-        <Pane text={text} cursor={cursor}/>
-        <Footer cursor={cursor} text={text} mode={mode}/>
+        {
+          this.renderPanes(layout)
+        }
+        <Footer layout={layout} mode={mode}/>
       </div>
     )
   }
