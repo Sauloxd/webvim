@@ -33,8 +33,17 @@ Maybe i should index by line?
 */
 const addCharOnCursorY = (text, cursor, newChar) => {
   const charBehindCursorIndex = positiveOrZero(cursor.x)
+
   return text.map(line => {
+
     if(line.index !== cursor.y) return line
+
+    if (line.value.length === 0) {
+      return {
+        ...line,
+        value: [{ value: newChar, index: 0 }]
+      }
+    }
 
     return {
       ...line,
@@ -102,13 +111,15 @@ const handleEnter = pane => ({
   cursor: { ...pane.cursor, x: 0, y: pane.cursor.y + 1 },
   text: pane.text.reduce((newText, line) => {
     if (line.index < pane.cursor.y) return newText.concat(line)
-    if (line.index === pane.cursor.y) return newText.concat({
-      ...line,
-      value: line.value.slice(0, pane.cursor.x)
-    }, {
-      index: line.index + 1,
-      value: line.value.slice(pane.cursor.x).map(char => ({ ...char, index: char.index - pane.cursor.x }))
-    })
+    if (line.index === pane.cursor.y) {
+      return newText.concat({
+        ...line,
+        value: line.value.slice(0, pane.cursor.x)
+      }, {
+        index: line.index + 1,
+        value: line.value.slice(pane.cursor.x).map(char => ({ ...char, index: char.index - pane.cursor.x }))
+      })
+    }
     if (line.index > pane.cursor.y) return newText.concat({ ...line, index: line.index + 1 })
 
     return newText

@@ -4,7 +4,8 @@ export const MODES = {
 }
 
 export const SOURCE = {
-  KEYBOARD: 'keyboard'
+  KEYBOARD: 'keyboard',
+  MOUSE: 'mouse'
 }
 
 export const KEY = {

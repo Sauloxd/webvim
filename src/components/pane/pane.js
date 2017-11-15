@@ -4,8 +4,12 @@ import Line from '../line'
 import './pane.css'
 import Footer from '../footer'
 import { store } from '../../reducers/root.reducer'
+import { SOURCE } from '../../constants'
 
 const commonStyle = 'pane'
+export const PANE = {
+  ACTIVATE: 'pane-activate'
+}
 
 const concatStyles = styles => styles.reduce((res, style) => `${res} ${style}`, '')
 const Pane = (pane) => {
@@ -16,10 +20,10 @@ const Pane = (pane) => {
   )
 
   const activatePane = () => {
-    console.log('dispatching...')
+    console.log('dispatching...', SOURCE)
     store.dispatch({
-      type: 'MOUSE',
-      command: 'activate',
+      type: SOURCE.MOUSE,
+      command: PANE.ACTIVATE,
       on: pane
     })
   }
