@@ -45,14 +45,15 @@ export const activatePane = ({ layout, targetPane }) => {
   return paneModifierOnLayout({ layout: layoutWithoutActivePanes, currentPane: targetPane, paneModifier: pane => ({ ...pane, active: true }) })
 }
 
-export const addColumnPane = ({ layout, currentPane }) => {
+export const addPane = direction => ({ layout, currentPane }) => {
   const clonedLayout = clone(layout, true)
 
   const paneParentReference = currentPane.index.slice(0, -1)
     .reduce((paneReference, panePosition) =>
       paneReference.value[panePosition], clonedLayout)
 
-  if (paneParentReference.type === 'column') {
+  if (paneParentReference.type === direction) {
+    /* This has side effects :( */
     paneParentReference.value = paneParentReference.value
       .reduce((reorderedPanes, pane) => {
         if (pane.index.slice(-1)[0] < currentPane.index.slice(-1)[0]) return reorderedPanes.concat(pane)
@@ -77,9 +78,10 @@ export const addColumnPane = ({ layout, currentPane }) => {
       active: false
     }
 
+    /* This has side effects :( */
     Object.assign(paneParentReference.value, {
       [currentPane.index.slice(-1)]: {
-        type: 'column',
+        type: direction,
         index: currentPane.index,
         value: [{...currentPane, active: false}, {...newPane, active: true}].map((pane, i) => ({...pane, index: pane.index.concat(i)}))
       }

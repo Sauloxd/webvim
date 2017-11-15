@@ -15,7 +15,8 @@ class App extends Component {
       let timeout
 
       const comboKeys = [
-        KEY.CTRL.value
+        KEY.CTRL.value,
+        KEY.SHIFT.value
       ]
 
       return ev => {

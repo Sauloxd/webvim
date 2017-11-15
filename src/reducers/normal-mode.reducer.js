@@ -6,7 +6,7 @@ import {
   checkIfHasLineOn,
   getLineBellow,
   paneModifierOnLayout,
-  addColumnPane
+  addPane,
 } from './utils'
 
 /*
@@ -64,7 +64,8 @@ const normalMode = ({ layout, currentPane }, action) => {
   }
 
   const layoutActions = {
-    ['C-d']: addColumnPane
+    ['C-S-D']: addPane('column'),
+    ['C-d']: addPane('row')
   }
 
   return {

@@ -2,7 +2,7 @@ import {
   findLayoutLeaves,
   paneModifierOnLayout,
   activatePane,
-  addColumnPane
+  addPane
 } from './utils'
 
 /* *
@@ -153,7 +153,7 @@ it('Should add a new column pane', () => {
     }]
   }
 
-  expect(addColumnPane({ layout, currentPane }))
+  expect(addPane('column')({ layout, currentPane }))
     .toEqual({
       type: 'row',
       index: [],
@@ -205,7 +205,55 @@ it('Should add a new column pane, in a column parent pane', () => {
     }]
   }
 
-  expect(addColumnPane({ layout, currentPane }))
+  expect(addPane('column')({ layout, currentPane }))
+    .toEqual({
+      type: 'column',
+      index: [],
+      value: [{
+        type: 'pane',
+        index: [0],
+        active: false
+      }, {
+        type: 'pane',
+        index: [1],
+        active: false
+      }, {
+        type: 'pane',
+        index: [2],
+        text: [{
+          index: 0,
+          value: [{
+            index: 0,
+            value: ' ',
+          }]
+        }],
+        cursor: {x: 0, y:0},
+        active: true
+      }]
+    })
+})
+
+it('Should add a new row pane, in a column parent pane', () => {
+  const currentPane = {
+    type: 'pane',
+    index: [1],
+    active: true
+  }
+  const layout = {
+    type: 'column',
+    index: [],
+    value: [{
+      type: 'pane',
+      index: [0],
+      active: false
+    }, {
+      type: 'pane',
+      index: [1],
+      active: true
+    }]
+  }
+
+  expect(addPane('column')({ layout, currentPane }))
     .toEqual({
       type: 'column',
       index: [],
