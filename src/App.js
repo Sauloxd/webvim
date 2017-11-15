@@ -52,7 +52,7 @@ class App extends Component {
       if (node.type === 'pane') return <Pane mode={mode} key={node.index.join('-')} active={node.active} index={node.index} text={node.text} cursor={node.cursor} />
       // Fix this
       return (
-        <Layout type={node.type}>
+        <Layout key={node.index.join('-')} type={node.type}>
           {
             node.value.map(findLayoutLeaves)
           }

@@ -9,8 +9,10 @@ const formatText = text => text.split('\n')
       ({ index, value: char })) }))
 const layout = {
   type: 'row',
+  index: [0],
   value: [{
     type: 'column',
+    index: [0, 0],
     value: [{
       type: 'pane',
       index: [0, 0, 0],
@@ -26,6 +28,7 @@ const layout = {
     }]
   }, {
     type: 'row',
+    index: [0, 1],
     value: [{
       type: 'pane',
       index: [0, 1, 0],
@@ -35,8 +38,10 @@ const layout = {
     }]
   }, {
     type: 'row',
+    index: [0, 2],
     value: [{
       type: 'column',
+      index: [0, 2, 0],
       value: [{
         type: 'pane',
         index: [2, 0, 0],
@@ -46,6 +51,7 @@ const layout = {
       }]
     }, {
       type: 'row',
+      index: [0, 2, 1],
       value: [{
         type: 'pane',
         index: [2, 1, 0],

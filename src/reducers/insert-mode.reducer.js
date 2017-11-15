@@ -66,16 +66,12 @@ const joinCurrentLineWithAboveLine = pane => {
   return ({
     ...pane,
     cursor: { ...cursor, x: previousLine.value.length, y: cursor.y - 1 },
-    text: text.filter(line => line.index !== cursor.y).map(line => {
-      if (line.index < cursor.y - 1) return line
-      if (line.index === cursor.y - 1) return ({
-        ...line,
-        value: line.value.concat(currentLine.value.map(char => ({ ...char, index: char.index + line.value.length })))
-      })
-      if (line.index > cursor.y - 1) return ({ ...line, index: line.index - 1 })
-
-      return
-    })
+    text: text.filter(line => line.index !== cursor.y).map(line =>
+      (line.index === cursor.y - 1)
+        ? ({ ...line, value: line.value.concat(currentLine.value.map(char => ({ ...char, index: char.index + line.value.length }))) })
+        : (line.index > cursor.y - 1)
+          ? ({ ...line, index: line.index - 1 })
+          : line)
   })
 }
 
@@ -86,19 +82,18 @@ const handleBackspace = pane => {
   return ({
     ...pane,
     cursor: { ...cursor, x: cursor.x - 1 },
-    text: text.map(line => {
-      if (line.index !== cursor.y) return line
-      return {
-        ...line,
-        value: line.value.reduce((newLine, char) => {
-          if (char.index < cursor.x - 1) return newLine.concat(char)
-          if (char.index > cursor.x - 1) return newLine.concat({ ...char, index: char.index - 1 })
-          if (char.index === cursor.x - 1) return newLine
-
-          return newLine
-        }, [])
-      }
-    })
+    text: text.map(line =>
+      line.index !== cursor.y
+        ? line
+        : {
+          ...line,
+          value: line.value.reduce((newLine, char) => (char.index < cursor.x - 1)
+            ? newLine.concat(char)
+            : (char.index > cursor.x - 1)
+              ? newLine.concat({ ...char, index: char.index - 1 })
+              : newLine, [])
+        }
+    )
   })
 }
 
@@ -116,7 +111,7 @@ const handleEnter = pane => ({
     })
     if (line.index > pane.cursor.y) return newText.concat({ ...line, index: line.index + 1 })
 
-    return
+    return newText
   }, [])
 })
 

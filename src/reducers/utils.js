@@ -1,3 +1,4 @@
+/*eslint no-mixed-operators: off*/
 import { clone, isFunction } from 'lodash'
 
 export const getCurrentLine = state => state.text.find(({ index }) => index === state.cursor.y)

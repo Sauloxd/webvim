@@ -14,11 +14,12 @@ const Pane = ({ index, text, cursor, active, mode }) => {
   )
 
   return (
-    <div className={className}>
+    <div className={className} onClick={() => { console.log('clicked pane') }}>
       {text.map((line) => (
-        <Line key={index.join('-') + line.index} line={line} isActive={line.index === cursor.y} onChar={cursor.x}/>
+        <Line key={index.join('-') + line.index} line={line} isActive={line.index === cursor.y && active} onChar={cursor.x}/>
       ))}
       <Footer mode={mode} text={text} cursor={cursor} active={active}/>
+      {!active && <div className='pane__overlay'></div>}
     </div>
   )
 }
