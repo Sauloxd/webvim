@@ -1,18 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './footer.css'
-import { findLayoutLeaves } from '../../reducers/root.reducer';
 
 const textPercentage = (text, cursor) => Math.ceil((cursor.y + 1) * 100 / text.length)
 
-const Footer = ({ mode, layout }) => {
-  const { text, cursor } = findLayoutLeaves(layout).find(pane => pane.active)
-
+const Footer = ({ text, cursor, active, mode }) => {
   return (
     <div className={'footer__container'}>
       <div className={'footer__status__container'}>
-        <div className={'footer__vim-mode arrow-right'}> {mode.toUpperCase()} </div>
-        <div className={'footer__login-status arrow-right'}> Saulo Furuta </div>
+        { active && <div className={'footer__vim-mode arrow-right'}> {mode.toUpperCase()} </div> }
+        { active && <div className={'footer__login-status arrow-right'}> Saulo Furuta </div> }
         <div className={'footer__file-name'}> tutorial.md </div>
         <div className={'footer__file-status arrow-left'}> {textPercentage(text, cursor)}% {cursor.y}:{cursor.x} </div>
       </div>
@@ -22,8 +19,10 @@ const Footer = ({ mode, layout }) => {
   )}
 
 Footer.propTypes = {
-  mode: PropTypes.string,
-  layout: PropTypes.object
+  text: PropTypes.object,
+  cursor: PropTypes.object,
+  active: PropTypes.bool,
+  mode: PropTypes.string
 }
 
 export default Footer

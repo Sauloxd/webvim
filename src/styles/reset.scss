@@ -247,3 +247,14 @@ select[multiple]
   /* Move the label to the top */
   vertical-align:top;
 }
+
+html, body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+  & > div {
+    height: 100%;
+  }
+}
