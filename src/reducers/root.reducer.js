@@ -1,11 +1,13 @@
 import { createStore } from 'redux'
 import { PANE } from '../components/pane'
+import { CHAR } from '../components/line'
 import { MODES, SOURCE, layout as DEFAULT_LAYOUT } from '../constants'
 import normalMode from './normal-mode.reducer.js'
 import insertMode from './insert-mode.reducer.js'
 import {
   findLayoutLeaves,
-  activatePane
+  activatePane,
+  activateChar
 } from './utils'
 
 export const rootReducer = (state = {
@@ -38,6 +40,11 @@ export const rootReducer = (state = {
       return {
         ...state,
         layout: activatePane({ layout, targetPane: action.on })
+      };
+    case CHAR.ACTIVATE:
+      return {
+        ...state,
+        layout: activateChar({ layout, target: action.on })
       };
     default:
       return state;

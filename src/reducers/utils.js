@@ -52,6 +52,16 @@ export const activatePane = ({ layout, targetPane }) => {
   return layoutWithActivePane
 }
 
+export const activateChar = ({ layout, target }) => {
+  const allPanes = findLayoutLeaves(layout)
+  const activePane = allPanes.find(pane => pane.active)
+
+  return paneModifierOnLayout({ layout, currentPane: activePane, paneModifier: pane => ({ ...pane, cursor: {
+    x: target.char.index,
+    y: target.line.index
+  } }) })
+}
+
 export const addPane = direction => ({ layout, currentPane }) => {
   const clonedLayout = clone(layout, true)
 

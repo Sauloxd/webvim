@@ -20,7 +20,6 @@ const Pane = (pane) => {
   )
 
   const activatePane = () => {
-    console.log('dispatching...', SOURCE)
     store.dispatch({
       type: SOURCE.MOUSE,
       command: PANE.ACTIVATE,
@@ -30,9 +29,11 @@ const Pane = (pane) => {
 
   return (
     <div className={className} onClick={activatePane}>
-      {text.map((line) => (
-        <Line key={index.join('-') + line.index} line={line} isActive={line.index === cursor.y && active} onChar={cursor.x}/>
-      ))}
+      <div className={'pane-scroll'}>
+        {text.map((line) => (
+          <Line key={index.join('-') + line.index} line={line} isActive={line.index === cursor.y && active} onChar={cursor.x}/>
+        ))}
+      </div>
       <Footer mode={mode} text={text} cursor={cursor} active={active}/>
       {!active && <div className='pane__overlay'></div>}
     </div>

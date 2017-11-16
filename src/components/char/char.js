@@ -9,7 +9,7 @@ const whitespaceStyle = 'char__whitespace'
 
 const concatStyles = styles => styles.reduce((res, style) => `${res} ${style}`, '')
 
-const Char = ({ value, isActive }) => {
+const Char = ({ value, isActive, onClick }) => {
   const className = concatStyles(
     [commonStyle]
       .concat(isActive ? activeStyle : [])
@@ -20,13 +20,14 @@ const Char = ({ value, isActive }) => {
 
   /* the ø symbol is a marker for whitespace */
   return (
-    <div className={className}> <span className={charClassName}> { value === ' ' ? 'ø' : value } </span> </div>
+    <div className={className} onClick={onClick}> <span className={charClassName}> { value === ' ' ? 'ø' : value } </span> </div>
   )
 }
 
 Char.propTypes = {
   value: PropTypes.string,
-  isActive: PropTypes.bool
+  isActive: PropTypes.bool,
+  onClick: PropTypes.func
 }
 
 export default Char

@@ -7,6 +7,13 @@
   border-left: 1px dashed $fg;
 }
 
+.pane-scroll {
+  overflow-y: scroll;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
 .pane__overlay {
   width: 100%;
   height: 100%;
