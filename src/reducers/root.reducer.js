@@ -1,6 +1,6 @@
 import { createStore } from 'redux'
 import { PANE } from '../components/pane'
-import { MODES, SOURCE, layout } from '../constants'
+import { MODES, SOURCE, layout as DEFAULT_LAYOUT } from '../constants'
 import normalMode from './normal-mode.reducer.js'
 import insertMode from './insert-mode.reducer.js'
 import {
@@ -8,10 +8,9 @@ import {
   activatePane
 } from './utils'
 
-
 export const rootReducer = (state = {
   mode: MODES.NORMAL_MODE,
-  layout
+  layout: DEFAULT_LAYOUT
 }, action) => {
   const { layout } = state
   const currentPane = findLayoutLeaves(layout).find(pane => pane.active)

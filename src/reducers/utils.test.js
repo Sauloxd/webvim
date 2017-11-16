@@ -353,7 +353,7 @@ it('Should remove a pane from layout, that is not the root, and its not last of 
     })
 })
 
-it('Should remove a pane from layout, that is not the root, and its last of its layout child', () => {
+it.skip('Should remove a pane from layout, that is not the root, and its last of its layout child', () => {
   const currentPane = {
     type: 'pane',
     index: [0, 0],
@@ -405,7 +405,7 @@ it('Should remove a pane from layout, that is not the root, and its last of its 
     })
 })
 
-it('Should remove a pane from layout, that is not the root, and its last of its layout child, hardcore', () => {
+it.skip('Should remove a pane from layout, that is not the root, and its last of its layout child, hardcore', () => {
   const currentPane = {
     type: 'pane',
     index: [0, 0, 0, 0],
