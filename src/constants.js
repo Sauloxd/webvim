@@ -27,7 +27,7 @@ Stay tuned for features to come:\n
 - [ ] Have a way to sign-in using a command like :login -u saulo -p *****\n
 `
 
-const formatText = text => text.split('\n')
+export const formatText = text => text.split('\n')
   .filter(Boolean) // This removes empty lines. @TODO add empty space!
   .map((line, index) =>
     ({ index, value: line.split('').map((char, index) =>

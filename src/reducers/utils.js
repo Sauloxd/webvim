@@ -1,5 +1,5 @@
 /*eslint no-mixed-operators: off*/
-import { clone, isFunction, isEmpty, flatten } from 'lodash'
+import { clone, isFunction, isEmpty, isUndefined, flatten, isEqual } from 'lodash'
 
 export const getCurrentLine = state => state.text.find(({ index }) => index === state.cursor.y)
 export const getLineBellow = state => state.text.find(({ index }) => index === state.cursor.y + 1)
@@ -41,8 +41,15 @@ export const paneModifierOnLayout = ({ layout, currentPane, paneModifier }) => {
 }
 
 export const activatePane = ({ layout, targetPane }) => {
-  const layoutWithoutActivePanes = paneModifierOnLayout({ layout, currentPane: findLayoutLeaves(layout).find(pane => pane.active), paneModifier: pane => ({ ...pane, active: false }) })
-  return paneModifierOnLayout({ layout: layoutWithoutActivePanes, currentPane: targetPane, paneModifier: pane => ({ ...pane, active: true }) })
+  const allPanes = findLayoutLeaves(layout)
+  const activePane = allPanes.find(pane => pane.active)
+  const layoutWithoutActivePanes = (isUndefined(activePane) || activePane.length === 0)
+    ? layout
+    : paneModifierOnLayout({ layout, currentPane: activePane, paneModifier: pane => ({ ...pane, active: false }) })
+
+  const layoutWithActivePane = paneModifierOnLayout({ layout: layoutWithoutActivePanes, currentPane: targetPane, paneModifier: pane => ({ ...pane, active: true }) })
+
+  return layoutWithActivePane
 }
 
 export const addPane = direction => ({ layout, currentPane }) => {
@@ -89,4 +96,72 @@ export const addPane = direction => ({ layout, currentPane }) => {
 
     return clonedLayout
   }
+}
+
+export const removePane = ({ layout, currentPane }) => {
+  const clonedLayout = clone(layout, true)
+
+  const paneParentReference = currentPane.index.slice(0, -1).length === 0
+    ? clonedLayout
+    : currentPane.index.slice(0, -1)
+      .reduce((paneReference, panePosition) =>
+        paneReference.value[panePosition], clonedLayout)
+
+  // if there is more than 1 pane in the same layout, just pop the pane
+  if (paneParentReference.value.length > 1) {
+    paneParentReference.value =  paneParentReference.value.reduce((newChildren, child, index) => {
+      if (currentPane.index.slice(-1)[0] > index) return newChildren.concat(child)
+      if (currentPane.index.slice(-1)[0] === index) return newChildren
+      if (currentPane.index.slice(-1)[0] < index) return newChildren.concat({
+        ...child,
+        index: child.index.map((value, index, array) => index === array.length - 1 ? value - 1 : value)
+      })
+    }, [])
+
+    paneParentReference.value[0].active = true
+
+    return clonedLayout
+  }
+
+  // if there is just 1, we can't have empty layout, so we detroy the layout
+  if (paneParentReference.value.length === 1) {
+    // this is a weak validation... there is a problem, how to know if the pane is the last alive?
+    if (findLayoutLeaves(layout).length === 1) return clonedLayout // if its child from root, cant leave empty! Do nothing
+
+    const grandPaneParentReference = currentPane.index.slice(0, -2).length === 0
+      ? clonedLayout
+      : currentPane.index.slice(0, -2)
+        .reduce((paneReference, panePosition) =>
+          paneReference.value[panePosition], clonedLayout)
+
+    grandPaneParentReference.value = grandPaneParentReference.value.reduce((newChildren, child, index) => {
+      if (index < currentPane.index.slice(-2)[0]) return newChildren.concat(child)
+      if (index === currentPane.index.slice(-2)[0]) return newChildren
+      if (index > currentPane.index.slice(-2)[0]) {
+        return newChildren.concat({
+          ...child,
+          index: child.index.map((value, index, array) => index === array.length - 1 ? value - 1 : value),
+          value: recUpdateIndex(child)
+        })
+      }
+    }, [])
+
+    //@todo sauloxd this is a huge mistake
+    return activatePane({ layout: clonedLayout, targetPane: findLayoutLeaves(clonedLayout)[0] })
+  }
+
+
+  return clonedLayout
+}
+
+const recUpdateIndex = child => {
+  return child.value.map(pane => {
+    return {
+      ...pane,
+      index: pane.index.map((value, index, array) => index === array.length - 2 ? value - 1 : value),
+      ...(!isUndefined(pane.value) ? {
+        value: recUpdateIndex(pane)
+      } : {})
+    }
+  })
 }

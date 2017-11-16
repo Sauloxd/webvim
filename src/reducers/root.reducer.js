@@ -9,10 +9,11 @@ import {
 } from './utils'
 
 
-export const rootReducer =  (state = {
+export const rootReducer = (state = {
   mode: MODES.NORMAL_MODE,
   layout
 }, action) => {
+  const { layout } = state
   const currentPane = findLayoutLeaves(layout).find(pane => pane.active)
   const { type, command } = action
 

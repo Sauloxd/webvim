@@ -7,6 +7,7 @@ import {
   getLineBellow,
   paneModifierOnLayout,
   addPane,
+  removePane
 } from './utils'
 
 /*
@@ -65,8 +66,10 @@ const normalMode = ({ layout, currentPane }, action) => {
 
   const layoutActions = {
     ['C-S-D']: addPane('column'),
-    ['C-d']: addPane('row')
+    ['C-d']: addPane('row'),
+    ['C-x']: removePane
   }
+
 
   return {
     mode: command && changeModeKeys[command.key] || MODES.NORMAL_MODE,

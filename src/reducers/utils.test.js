@@ -2,8 +2,13 @@ import {
   findLayoutLeaves,
   paneModifierOnLayout,
   activatePane,
-  addPane
+  addPane,
+  removePane
 } from './utils'
+import {
+  formatText,
+  TUTORIAL_TEXT
+} from '../constants'
 
 /* *
  * The index length is the depth of its position on tree.
@@ -277,6 +282,185 @@ it('Should add a new row pane, in a column parent pane', () => {
         }],
         cursor: {x: 0, y:0},
         active: true
+      }]
+    })
+})
+
+it('Should remove a pane from layout, that is not the root, and its not last of its layout child', () => {
+  const currentPane = {
+    type: 'pane',
+    index: [0, 0],
+    active: true
+  }
+
+  const layout = {
+    type: 'row',
+    index: [],
+    value: [{
+      type: 'column',
+      index: [0],
+      value: [{
+        type: 'pane',
+        index: [0, 0],
+        text: formatText('1'),
+        cursor: { x: 0, y: 0 },
+        active: true
+      }, {
+        type: 'pane',
+        index: [0, 1],
+        text: formatText('2'),
+        cursor: { x: 0, y: 0 },
+        active: false
+      }]
+    }, {
+      type: 'row',
+      index: [1],
+      value: [{
+        type: 'pane',
+        index: [1, 0],
+        text: formatText('3'),
+        cursor: { x: 0, y: 0 },
+        active: false
+      }]
+    }]
+  }
+
+  expect(removePane({ layout, currentPane }))
+    .toEqual({
+      type: 'row',
+      index: [],
+      value: [{
+        type: 'column',
+        index: [0],
+        value: [{
+          type: 'pane',
+          index: [0, 0],
+          text: formatText('2'),
+          cursor: { x: 0, y: 0 },
+          active: true
+        }]
+      }, {
+        type: 'row',
+        index: [1],
+        value: [{
+          type: 'pane',
+          index: [1, 0],
+          text: formatText('3'),
+          cursor: { x: 0, y: 0 },
+          active: false
+        }]
+      }]
+    })
+})
+
+it('Should remove a pane from layout, that is not the root, and its last of its layout child', () => {
+  const currentPane = {
+    type: 'pane',
+    index: [0, 0],
+    active: true
+  }
+
+  const layout = {
+    type: 'row',
+    index: [],
+    value: [{
+      type: 'column',
+      index: [0],
+      value: [{
+        type: 'pane',
+        index: [0, 0],
+        text: formatText('2'),
+        cursor: { x: 0, y: 0 },
+        active: true
+      }]
+    }, {
+      type: 'row',
+      index: [1],
+      value: [{
+        type: 'pane',
+        index: [1, 0],
+        text: formatText('3'),
+        cursor: { x: 0, y: 0 },
+        active: false
+      }]
+    }]
+  }
+
+
+  expect(removePane({ layout, currentPane }))
+    .toEqual({
+      type: 'row',
+      index: [],
+      value: [{
+        type: 'row',
+        index: [0],
+        value: [{
+          type: 'pane',
+          index: [0, 0],
+          text: formatText('3'),
+          cursor: { x: 0, y: 0 },
+          active: false
+        }]
+      }]
+    })
+})
+
+it('Should remove a pane from layout, that is not the root, and its last of its layout child, hardcore', () => {
+  const currentPane = {
+    type: 'pane',
+    index: [0, 0, 0, 0],
+    active: true
+  }
+
+  const layout = {
+    type: 'row',
+    index: [],
+    value: [{
+      type: 'column',
+      index: [0],
+      value: [{
+        type: 'row',
+        index: [0, 0],
+        value: [{
+          type: 'column',
+          index: [0, 0, 0],
+          value: [{
+            type: 'pane',
+            index: [0, 0, 0, 0],
+            text: formatText('2'),
+            cursor: { x: 0, y: 0 },
+            active: true
+          }]
+        }]
+      }]
+    }, {
+      type: 'row',
+      index: [1],
+      value: [{
+        type: 'pane',
+        index: [1, 0],
+        text: formatText('3'),
+        cursor: { x: 0, y: 0 },
+        active: false
+      }]
+    }]
+  }
+
+
+  expect(removePane({ layout, currentPane }))
+    .toEqual({
+      type: 'row',
+      index: [],
+      value: [{
+        type: 'row',
+        index: [0],
+        value: [{
+          type: 'pane',
+          index: [0, 0],
+          text: formatText('3'),
+          cursor: { x: 0, y: 0 },
+          active: false
+        }]
       }]
     })
 })
