@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { isEmpty } from 'lodash'
+import { isEmpty, throttle } from 'lodash'
 import { SOURCE, KEY } from './constants'
 import Pane from './components/pane'
 import Layout from './components/layout'
@@ -19,7 +19,7 @@ class App extends Component {
         KEY.SHIFT.value
       ]
 
-      return ev => {
+      return throttle(ev => {
         if (comboKeys.includes(ev.key)) {
           if (!keys.includes(ev.key)) {
             timeout && clearTimeout(timeout);
@@ -36,7 +36,7 @@ class App extends Component {
           keys = []
           timeout && clearTimeout(timeout);
         }
-      }
+      }, 500)
     })()
   }
 
