@@ -73,8 +73,11 @@ export const addPane = direction => ({ layout, currentPane }) => {
     /* This has side effects :( */
     paneParentReference.value = paneParentReference.value
       .reduce((reorderedPanes, pane) => {
-        if (pane.index.slice(-1)[0] < currentPane.index.slice(-1)[0]) return reorderedPanes.concat(pane)
-        if (pane.index.slice(-1)[0] === currentPane.index.slice(-1)[0])
+        const panePositionInList = pane.index.slice(-1)[0]
+        const currentPanePositionInList = currentPane.index.slice(-1)[0]
+
+        if (panePositionInList < currentPanePositionInList) return reorderedPanes.concat(pane)
+        if (panePositionInList === currentPanePositionInList)
           return reorderedPanes.concat([{...currentPane, active: false}, {
             type: 'pane',
             index: paneParentReference.index.concat(currentPane.index.slice(-1)[0] + 1),
@@ -82,7 +85,8 @@ export const addPane = direction => ({ layout, currentPane }) => {
             cursor: { x: 0, y: 0 },
             active: true
           }])
-        if (pane.index.slice(-1)[0] > currentPane.index.slice(-1)[0]) return reorderedPanes.concat({...pane, index: pane.index.map((level, index, array) => index === array.length - 1? Number(level) + 1 : level)})
+
+        return reorderedPanes.concat({...pane, index: pane.index.map((level, index, array) => index === array.length - 1 ? Number(level) + 1 : level)})
       }, [])
 
     return clonedLayout
@@ -120,9 +124,12 @@ export const removePane = ({ layout, currentPane }) => {
   // if there is more than 1 pane in the same layout, just pop the pane
   if (paneParentReference.value.length > 1) {
     paneParentReference.value =  paneParentReference.value.reduce((newChildren, child, index) => {
-      if (currentPane.index.slice(-1)[0] > index) return newChildren.concat(child)
-      if (currentPane.index.slice(-1)[0] === index) return newChildren
-      if (currentPane.index.slice(-1)[0] < index) return newChildren.concat({
+      const currentPanePositionInList = currentPane.index.slice(-1)[0]
+
+      if (currentPanePositionInList > index) return newChildren.concat(child)
+      if (currentPanePositionInList === index) return newChildren
+
+      return newChildren.concat({
         ...child,
         index: child.index.map((value, index, array) => index === array.length - 1 ? value - 1 : value)
       })
@@ -147,16 +154,14 @@ export const removePane = ({ layout, currentPane }) => {
     grandPaneParentReference.value = grandPaneParentReference.value.reduce((newChildren, child, index) => {
       if (index < currentPane.index.slice(-2)[0]) return newChildren.concat(child)
       if (index === currentPane.index.slice(-2)[0]) return newChildren
-      if (index > currentPane.index.slice(-2)[0]) {
-        return newChildren.concat({
-          ...child,
-          index: child.index.map((value, index, array) => index === array.length - 1 ? value - 1 : value),
-          value: recUpdateIndex(child)
-        })
-      }
+      return newChildren.concat({
+        ...child,
+        index: child.index.map((value, index, array) => index === array.length - 1 ? value - 1 : value),
+        value: recUpdateIndex(child)
+      })
     }, [])
 
-    //@todo sauloxd this is a huge mistake
+    //@todo sauloxd this is a huge mistake @update: why though? 😂
     return activatePane({ layout: clonedLayout, targetPane: findLayoutLeaves(clonedLayout)[0] })
   }
 
