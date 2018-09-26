@@ -65,9 +65,9 @@ const normalMode = ({ layout, currentPane }, action) => {
   }
 
   const layoutActions = {
-    ['C-S-D']: addPane('column'),
-    ['C-d']: addPane('row'),
-    ['C-x']: removePane
+    'C-S-D': addPane('column'),
+    'C-d': addPane('row'),
+    'C-x': removePane
   }
 
 

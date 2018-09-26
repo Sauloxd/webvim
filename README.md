@@ -12,7 +12,7 @@ All implemented in a not so perfomatic (as today) react + redux combo.
 
 #### Future
   - Save current text modifications on localstorage and maybe in a persistent db
-  - Let them login through fb 
+  - Let them login through fb
   - implement NERDTREE dir visualizations, so one can save files, and view them later
 
 ## Running locally

@@ -1,5 +1,5 @@
 /*eslint no-mixed-operators: off*/
-import { clone, isFunction, isEmpty, isUndefined, flatten, isEqual } from 'lodash'
+import { clone, isFunction, isEmpty, isUndefined, flatten } from 'lodash'
 
 export const getCurrentLine = state => state.text.find(({ index }) => index === state.cursor.y)
 export const getLineBellow = state => state.text.find(({ index }) => index === state.cursor.y + 1)
@@ -12,8 +12,8 @@ export const checkIfHasLineOn = (type, state) => {
     next: state.text[state.cursor.y + 1]
   }[type]
   return response
-
 }
+
 export const formatText = text => text.split('\n')
   .filter(Boolean) // This removes empty lines. @TODO add empty space!
   .map((line, index) =>
@@ -86,26 +86,26 @@ export const addPane = direction => ({ layout, currentPane }) => {
       }, [])
 
     return clonedLayout
-  } else {
-    const newPane = {
-      type: 'pane',
-      index: currentPane.index,
-      text: formatText(' '),
-      cursor: { x: 0, y: 0 },
-      active: false
-    }
-
-    /* This has side effects :( */
-    Object.assign(paneParentReference.value, {
-      [currentPane.index.slice(-1)]: {
-        type: direction,
-        index: currentPane.index,
-        value: [{...currentPane, active: false}, {...newPane, active: true}].map((pane, i) => ({...pane, index: pane.index.concat(i)}))
-      }
-    })
-
-    return clonedLayout
   }
+
+  const newPane = {
+    type: 'pane',
+    index: currentPane.index,
+    text: formatText(' '),
+    cursor: { x: 0, y: 0 },
+    active: false
+  }
+
+  /* This has side effects :( */
+  Object.assign(paneParentReference.value, {
+    [currentPane.index.slice(-1)]: {
+      type: direction,
+      index: currentPane.index,
+      value: [{...currentPane, active: false}, {...newPane, active: true}].map((pane, i) => ({...pane, index: pane.index.concat(i)}))
+    }
+  })
+
+  return clonedLayout
 }
 
 export const removePane = ({ layout, currentPane }) => {

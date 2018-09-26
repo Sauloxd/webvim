@@ -73,9 +73,11 @@ class App extends Component {
     )
   }
 }
+
 App.propTypes = {
   mode: PropTypes.string
 }
+
 unregister()
 export default App
 export { store }
