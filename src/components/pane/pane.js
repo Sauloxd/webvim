@@ -13,7 +13,7 @@ export const PANE = {
 
 const concatStyles = styles => styles.reduce((res, style) => `${res} ${style}`, '')
 const Pane = (pane) => {
-  const { index, text, cursor, active, mode } = pane
+  const { index, text, cursor, active, mode, fileName } = pane
   const className = concatStyles(
     [commonStyle]
       .concat(active ? '--active' : [])
@@ -34,7 +34,7 @@ const Pane = (pane) => {
           <Line key={index.join('-') + line.index} line={line} isActive={line.index === cursor.y && active} onChar={cursor.x}/>
         ))}
       </div>
-      <Footer mode={mode} text={text} cursor={cursor} active={active}/>
+      <Footer mode={mode} text={text} cursor={cursor} active={active} fileName={fileName}/>
       {!active && <div className='pane__overlay'></div>}
     </div>
   )
@@ -45,7 +45,8 @@ Pane.propTypes = {
   text: PropTypes.array,
   cursor: PropTypes.object,
   active: PropTypes.bool,
-  mode: PropTypes.string
+  mode: PropTypes.string,
+  fileName: PropTypes.string,
 }
 
 export default Pane

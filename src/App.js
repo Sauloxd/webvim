@@ -4,7 +4,6 @@ import { isEmpty, throttle } from 'lodash'
 import { SOURCE, KEY } from './constants'
 import Pane from './components/pane'
 import Layout from './components/layout'
-import { unregister } from './registerServiceWorker'
 import { store } from './reducers'
 import './App.css'
 
@@ -54,7 +53,7 @@ class App extends Component {
   renderPanes(layout, mode) {
     const findLayoutLeaves = node => {
       if (node.type !== 'pane' && isEmpty(node.value)) throw new Error('Error when trying to find leaves on layout tree!', node)
-      if (node.type === 'pane') return <Pane mode={mode} key={node.index.join('-')} active={node.active} index={node.index} text={node.text} cursor={node.cursor} />
+      if (node.type === 'pane') return <Pane mode={mode} key={node.index.join('-')} active={node.active} index={node.index} text={node.text} cursor={node.cursor} fileName={node.fileName} />
       // Fix this
       return (
         <Layout key={node.index.join('-')} type={node.type}>
@@ -85,6 +84,5 @@ App.propTypes = {
   mode: PropTypes.string
 }
 
-unregister()
 export default App
 export { store }

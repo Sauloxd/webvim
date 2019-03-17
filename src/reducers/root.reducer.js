@@ -1,7 +1,7 @@
 import { createStore } from 'redux'
 import { PANE } from '../components/pane'
 import { CHAR } from '../components/line'
-import { MODES, SOURCE, layout as DEFAULT_LAYOUT } from '../constants'
+import { MODES, SOURCE, DEFAULT_LAYOUT } from '../constants'
 import normalMode from './normal-mode.reducer.js'
 import insertMode from './insert-mode.reducer.js'
 import {

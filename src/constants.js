@@ -72,23 +72,32 @@ var background = [\n
     {\n
       company: "Taqtile",\n
       Period: "May 01/2015 ~ September 01/2015",\n
-      role: "Intern",\n
-      activities: "Frontend mobile/web developper",\n
-      stack: ["Android Dev (Java)", "Angular 1.x", "nodeJS", "HTML5/CSS3", "Jade", "Stylus"]\n
+      role: "Intern - Frontend mobile/webdevelop",\n
+      stack: ["Angular 1.x", "HTML5 - Jade", "CSS3 - Stylus"]\n
     },\n
     {\n
       company: "Certsys",\n
       Period: "Jan 01/2016 ~ May 01/2016",\n
-      role: "Intern",\n
-      activities: "System requirements gathering and webdevelopping",\n
+      role: "Intern - System requirements gathering and webdevelop",\n
       stack: ["Angular 1.x", "nodeJS", "HTML5/CSS3", "mongoDB", "Gulp"]\n
     },\n
     {\n
       company: "Qulture.Rocks",\n
       Period: "Sep 01/2016 ~ Jan 01/2017",\n
-      role: "Intern",\n
-      activities: "Webdevelopping, UX/UI designer",\n
+      role: "Intern - Webdevelop, UX/UI designer",\n
       stack: ["Angular 1.x", "HTML5/CSS3", "rails", "Sketch (design)"]\n
+    },\n
+    {\n
+      company: "Revmob",\n
+      Period: "May 09/2017 ~ Jan 01/2018",\n
+      role: "Intern - Backend developer"\n
+      stack: ["nodeJs", "mongodb"]\n
+    },\n
+    {\n
+      company: "Qulture.Rocks",\n
+      Period: "Jan 01/2018" ~ Current,\n
+      role: "Software Engineer - Frontend engineer",\n
+      stack: ["Angular 1.x", "React", "Apollo", "Rails"]\n
     },\n
 ];\n
 \`\`\`\n
@@ -107,7 +116,7 @@ export const formatText = text => text.split('\n')
     ({ index, value: line.split('').map((char, index) =>
       ({ index, value: char })) }))
 
-export const layout = {
+export const DEFAULT_LAYOUT = {
   type: 'row',
   index: [],
   value: [{
@@ -118,13 +127,15 @@ export const layout = {
       index: [0, 0],
       text: formatText(TUTORIAL_TEXT),
       cursor: { x: 0, y: 0 },
-      active: true
+      active: true,
+      fileName: 'tutorial.md'
     }, {
       type: 'pane',
       index: [0, 1],
       text: formatText(' '),
       cursor: { x: 0, y: 0 },
-      active: false
+      active: false,
+      fileName: 'tmp1'
     }]
   }, {
     type: 'row',
@@ -134,7 +145,8 @@ export const layout = {
       index: [1, 0],
       text: formatText(ABOUT_ME),
       cursor: { x: 0, y: 0 },
-      active: false
+      active: false,
+      fileName: 'about-me.md'
     }]
   }]
 }
