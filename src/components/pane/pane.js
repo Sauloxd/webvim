@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Line from '../line'
-import './pane.css'
+import './pane.scss'
 import Footer from '../footer'
 import { store } from '../../reducers/root.reducer'
 import { SOURCE } from '../../constants'

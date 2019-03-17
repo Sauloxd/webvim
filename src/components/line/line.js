@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Char from '../char'
 import { store } from '../../reducers/root.reducer'
 import { SOURCE } from '../../constants'
-import './line.css'
+import './line.scss'
 
 export const CHAR = {
   ACTIVATE: 'char-activate'

@@ -1,7 +1,7 @@
 /*eslint no-mixed-operators: off*/
 import React from 'react'
 import PropTypes from 'prop-types'
-import './char.css'
+import './char.scss'
 
 const activeStyle = '--active'
 const commonStyle = 'char__cntr'

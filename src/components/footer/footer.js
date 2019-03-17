@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './footer.css'
+import './footer.scss'
 
 const textPercentage = (text, cursor) => Math.ceil((cursor.y + 1) * 100 / text.length)
 

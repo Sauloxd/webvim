@@ -5,7 +5,7 @@ import { SOURCE, KEY } from './constants'
 import Pane from './components/pane'
 import Layout from './components/layout'
 import { store } from './reducers'
-import './App.css'
+import './App.scss'
 
 class App extends Component {
   componentDidMount() {
