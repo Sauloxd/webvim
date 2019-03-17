@@ -31,12 +31,19 @@ class App extends Component {
           store.dispatch({
             type: SOURCE.KEYBOARD,
             mode: store.getState().mode,
-            command: { key: keys.length > 0 ? keys.reduce((comboKey, key) => comboKey + key.value.split('')[0] + '-', '') + ev.key : ev.key, keyCode: keys.length > 0 ? 'CUSTOM' : ev.keyCode }
+            command: { 
+              key: keys.length > 0 
+                ? keys.reduce((comboKey, key) => comboKey + key.value.split('')[0] + '-', '') + ev.key 
+                : ev.key, 
+              keyCode: keys.length > 0 
+                ? 'CUSTOM' 
+                : ev.keyCode 
+            }
           })
           keys = []
           timeout && clearTimeout(timeout);
         }
-      }, 500)
+      }, 200)
     })()
   }
 
