@@ -11,6 +11,7 @@
   "author": "sauloxd",
   "license": "MIT",
   "dependencies": {
+    "node-sass": "^4.11.0",
     "prop-types": "^15.6.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
