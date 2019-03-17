@@ -1,0 +1,9 @@
+language: node_js
+deploy:
+  provider: s3
+  access_key_id: AKIAJH7GF2IJUOBJ6LDQ
+  secret_access_key:
+    secure: H0eA5zsZP99Dz1qZDtLUGpXJcPELZLCiZWVe8RY9sFjSy/PczQ83ZUbJWb4RBq1OEyRnlbWhssagNEljfcI3eAZE4krZSZ0QnEkUTS7dxJupJD3FI15osmyVQP4oiqi64zHfCUv/bK9DPInSbLp/wYoBlw6nBL7cGb6c6KVrlX1FSClXqeHTfkEQRBOnvRU9v5mWxhuI6iJr4nI0KFYAMZoPSv51qy7MlnCSmrL/orwRSA4hn/znDrsaoCxOX7/yHDmN3IuXDf3nD6OoMgncYYSedc9ir9IWXL15lRPb5ZsCumlc/KpTN9j5iBjwbHQ/Zhn7MPZOrYeM2lUQk8WhySmGOqGRvbNMjMJ3NrcYF4QxSO5mWTCcTjgTQkN30EhKA4qe/yBOmVn5tIqfGJzi6odYia6aQISZMxkZe/lr3YxNrXGwb8smWrhoOxQMJRDmceogn5Sp7EcW7939JuX/C9U41ya62i600zX9J4zbG3c+sC3lh73brC0mSf1oOxMisFuIAM1i1c9KygfiLEZXLDvlplP/rMFE4dEcs1MdRiP6Yyx6402k+kTRdFQtOiOBN5m+fjah/2wEfQdu6KZ3p7LmoLBXmqKCaNGzH7t12fR3B/KtBP0RI+pZKgjZDAoyHoP0ccSReMg8odtUWBy2gW/sLtWY8Zz4VJLMTytv/Pw=
+  bucket: "www.saulo.dev"
+  on:
+    repo: Sauloxd/webvim
