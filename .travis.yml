@@ -3,16 +3,16 @@ cache:
   directories:
   - node_modules
 script:
-  - npm test
-  - npm run build
+- npm test
+- npm run build
 deploy:
   provider: s3
   region: us-west-2
   local_dir: build
   access_key_id: AKIAJH7GF2IJUOBJ6LDQ
-  secret_access_key:
-    secure: ffI/MRGVRST1Zk9hKjDBaJMnAiK8NTpy41lwdbCP7GNbWmNJ2T37wy/YruoUckIR5s6nqf39e1plopwCR7iBo+MNvPTq0aRFaHkjMM6Ot8WyZ4PcVuiQJc+a4DT0j00mt51l2zXjlsY8EItKYBriHiYmVpOakVE1yfAlVpeZn1hNFw6tSgDGYSAS+36jo+A0/AV5GfhEVXdtQrcHhorn8F3oarSL2uxgwdBqHUUCxrH8iWo98ovKIF/KYOZlrTIy4xR1qfIVX1eHgqUZIRobgOYDqkqnip7fUDoxopoyYphZLT3WN7muZzAUwcYztauxcGs3hz6Z3hKxVX80aa8ibSUIDRVpDDhQM2Dc6Sc5nX2fgrCutPUdDNHwa7Z5SpYpub1nlvI0wHh4tly57wIYSxPaG/SPoK6H8/GXiMXV6XvGd/ZrNpybFjieGu1+qyshNGBtiINmOdal4x3qGAOHR7q6ZGGW8OFo3fhb4Jfuo/XKvCBe5LSq/WtZgU7VRVTRNo1iyx5NbSv7gF4CdwxNH0wucy/+VbsatVBQKKVvunSToAYfIOOR9L41fR1q9UsqsZ5N+103vRJXT/6rZLlrA4mHCnlBFcDXmCZ/bKLHneVQEaytXRxa9Fc06Jc+ARhQ7lkCvCNeHC2zfktHYBEY6Ssdpdkf71aUsaC0Td7erhw=
   skip_cleanup: true
   bucket: www.saulo.dev
   on:
     repo: Sauloxd/webvim
+  secret_access_key:
+    secure: iqVbi/EdFrK+Jnc/g1QIJXgm1Q3MYnZZhaJIoqNQ9LBg0osPcDaPIVuJAP6CDbHjTt7k4OPD6sHm9LIrDRwXm9RtWK99xeyGRDy89K627USrEMfnfpt+tF+Tbiiw3FPv0LPwFwTz65L2MMLgemPFg3TPxKfVMCQF7Rq+8rfPOY6vxPwZHzR/MvS8d0xSgwkuainispo5F26ubNLuR/bJzxaSD/HzucWxrRGuM39Y8gnaod2TXZPa0BwKWuK1OIUUORZH4YskAhi4EBogqZzPopUTRmBxjrsmAYjmMaP/6ZIHZ5D+N9MKBQq81Cx3w5Kf1CSKmp7V8ys//s0REPvYFH1ewOB74mwjhNpDVZzFoKmUYlNJqlMROoyMoyosYFtIBDH6ns6+BxGzdTDknp0Icw7W7LHxLXHxT6MZK7QFPJhj1UfXmufEPGfFV7iaeqs6aJzfBWOBb/2O3tuiaF0mtCeFcbLx/5ypvLMUSS00GA9dAlZeUv2IlKoQPw/zKUI+Pzpggw4nUvzhNidCSyB2wbDDWSReXyG14d6jnteg/n2p/I5ADvPialVTWvaDVdByH5xJKT8Yq4l7GfsRBaid3G2Krk00Lpz9OTYji/IN9Ra0QHi6bIyZGrWqUKdY5GB1HrZJ+rmPTSp3H+ay9PiPZFVnsW53DRHZmxUr9zjZKGU=
