@@ -5,12 +5,17 @@ cache:
 script:
 - npm test
 - npm run build
+before_deploy: pip install --user awscli
 deploy:
-  provider: s3
+  provider: script
+  script: ~/.local/bin/aws s3 sync build s3://www.saulo.dev --region=us-west-2 --delete
   access_key_id: AKIAJH7GF2IJUOBJ6LDQ
+  acl: public_read
   secret_access_key:
     secure: t4SqWRD2LgqWtGVeMcFfk6ervSGAL/+eQ0Jm6L2d5meIaRBudEFjPqz35ogj1n1tm+tMFWTuhnpUc/Ht+WiDWmXFomnGe34p5KjuycRp+0ozJpuDLMoJftaIfd2tvnoYmY7QFTbIEUkSJjZmyf1sb4gWn8XuY4cpw76a8VGJAiU/IP70gqVhFOB4g0twKZwDVtFwS58VlfOK2Ez/AI9wxO7W7krEON7dY1hfm2M3pvbXy1S08ePkDsz5WtI95d9gWML8eOfteVTPD7UicaXIKZMRfTACfXw/zT2172hji+m5frzE5zjjy4M3QWdng+r+Wm7ioevFUeGIEIYTpJklgpBfyv9t0LrlTNlZeUiOXxF9jPKdXf4XeM6ZzJ6XEQx7FutnCo/VaWhYfAZdlsUysc/i4p8c7LUM5cgPC8JkbYQvHxkiUnOXeunpI0Rh+fuc4mS8sC7KasAHmy34QGS6qXlOayt0SKwDBxjVGMPe05MklO41ENNj7lGP/69pVo8nXmqIuJnxVJRccYVPYA8e6x/Rn5sIQycuReX23gtl5XoHiDYvRwEoHyiDLXDv2RmzLJnz63EzBF3sbgXwfi3ZGreK5F5t/VyoRbtoCldeoU0nmtxGMKJTf0GyAgq9alvX8iX/i8yjVOCnMZqlifFF4Eku3eK08kf0ygJ+qNruLp8=
   bucket: www.saulo.dev
   region: us-west-2
   local_dir: build
   skip_cleanup: true
+  on:
+    branch: master
