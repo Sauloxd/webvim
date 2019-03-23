@@ -8,7 +8,7 @@ script:
 before_deploy: pip install --user awscli
 deploy:
   provider: script
-  script: "~/.local/bin/aws s3 sync build s3://saulo.dev --region=us-east-1 --delete"
+  script: scripts/s3-deploy.sh
   acl: public_read
   bucket: saulo.dev
   region: us-east-1
