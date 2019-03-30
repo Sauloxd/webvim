@@ -1,3 +1,5 @@
+import { age } from './utils/';
+
 export const MODES = {
   INSERT_MODE: 'insert',
   NORMAL_MODE: 'normal'
@@ -41,7 +43,7 @@ export const TUTORIAL_TEXT = `
 
 export const ABOUT_ME = `
 # Who am I\n
-My name is Saulo Toshiichi Furuta, 23 years old!\n
+My name is Saulo Toshiichi Furuta, ${age('1993/12/04')} years old!\n
 Nice to meet y'all ;)\n
 I currently live in São Paulo - Brazil.\n
 But I wasn't born there. I'm actually from a small town in the surrounding of the metropolis, named Mogi das Cruzes, where I spent most of my youth.\n
@@ -52,7 +54,7 @@ After I enrolled in my College - Escola Politécnica da Universidade de São Pau
 \`\`\`\n
 var me = {\n
   name: "Saulo Toshiichi Furuta",\n
-  age: 23,\n
+  age: ${age('1993/12/04')},\n
   maritalStatus: "Single",\n
   country: "Brazil",\n
   state: "São Paulo",\n
